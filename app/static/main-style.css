@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Основной контент */
+.content {
+    padding: 20px;
+    margin-left: 60px; /* Узкий сайдбар по умолчанию */
+    transition: margin-left 0.3s;
+}
+
+/* Сайдбар */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 60px; /* Узкий сайдбар */
+    height: 100%;
+    background-color: #333;
+    transition: width 0.3s;
+    overflow-x: hidden;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Горизонтальное центрирование */
+}
+
+/* Состояние сайдбара, когда он расширен */
+.sidebar.expanded {
+    width: 250px;
+}
+
+/* Заголовок сайдбара */
+.sidebar h2 {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+    display: none; /* Скрыть заголовок по умолчанию */
+}
+
+.sidebar.expanded h2 {
+    display: block; /* Показать заголовок при расширенном сайдбаре */
+}
+
+/* Плитки */
+.tile {
+    display: flex;
+    flex-direction: column; /* Выстраиваем изображения и текст по вертикали */
+    align-items: center;
+    margin-bottom: 15px;
+    background-color: #444;
+    padding: 10px;
+    width: 90%;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+/* Изменение направления плиток при расширенном сайдбаре */
+.sidebar.expanded .tile {
+    flex-direction: row; /* Выстраиваем в строку */
+    align-items: center; /* Центрируем вертикально */
+}
+
+.tile img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px; /* Отступ между изображением и текстом */
+}
+
+.tile span {
+    color: white;
+    display: none; /* Скрыть текст по умолчанию */
+}
+
+.sidebar.expanded .tile span {
+    display: block; /* Показать текст при расширенном сайдбаре */
+}
+
+.tile:hover {
+    background-color: #555;
+}
+
+
+/* Кнопка для открытия/закрытия сайдбара */
+.toggle-btn {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.3s;
+}

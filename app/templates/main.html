@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайдбар как в Obsidian с кнопкой внутри</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main-style.css') }}">
+</head>
+<body>
+
+    <!-- Основной контент -->
+    <div class="content" id="content">
+        <h1>Welcome to ToDoFam</h1>
+        <p>Это главная страница с содержимым. Здесь может быть текст, изображения, видео и другой контент.</p>
+    </div>
+
+    <!-- Сайдбар -->
+    <div class="sidebar" id="sidebar">
+        <!-- Кнопка для открытия/закрытия сайдбара -->
+        <!-- <button class="toggle-btn" onclick="toggleSidebar()">☰</button> -->
+        
+        <div class="tile" onclick="toggleSidebar()">
+            <img src="https://via.placeholder.com/30" alt="Иконка меню">
+            <span><p href="page1.html">Roll</p></span>
+        </div>
+
+        <div class="tile" onclick="location.href='page13.html';">
+            <img src="https://via.placeholder.com/30" alt="Иконка 1">
+            <span><p href="page1.html">Groups</p></span>
+        </div>
+
+        <div class="tile" onclick="location.href='page23.html';">
+            <img src="{{ url_for('static', filename='loop.png') }}" alt="Иконка 2">
+            <span><p href="page2.html">Search</p></span>
+        </div>
+
+    </div>
+
+    <script>
+        localStorage.setItem("token", "{{acces_token}}")
+        console.log('Token saved', localStorage.getItem('token'))
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var content = document.getElementById("content");
+
+            sidebar.classList.toggle("expanded");
+
+            // Сдвигаем контент вправо, если сайдбар открыт
+            if (sidebar.classList.contains("expanded")) {
+                content.style.marginLeft = "250px";
+            } else {
+                content.style.marginLeft = "60px"; // Возвращаем в исходное положение
+            }
+        }
+    </script>
+
+</body>
+</html>

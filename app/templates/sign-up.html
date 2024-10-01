@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='sign-up.css') }}">
+    <title>ToDoFam</title>
+</head>
+<body>
+    <div class="container">
+        <form class="registration-form" id="registrationForm" method="post" action="{{url_for('main.walidateReg')}}">
+            <h2>Sign up</h2>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required value="{{name if name}}">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required value="{{email if email}}">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required value="{{password if password}}">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm the password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required value="{{password2 if password2}}">
+            </div>
+            {% if error_message %}
+            <div style="color: red;">{{ error_message }}</div>
+            {% endif %}
+            <button type="submit">Sign up</button>
+            <p class="message" id="message"></p>
+        </form>
+    </div>
+
+
+</body>
+<script>
+    
+</script>
+
+</html>
