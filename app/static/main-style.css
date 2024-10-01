@@ -46,7 +46,7 @@ body {
 }
 
 /* Плитки */
-.tile {
+.sidebar-tile {
     display: flex;
     flex-direction: column; /* Выстраиваем изображения и текст по вертикали */
     align-items: center;
@@ -60,27 +60,27 @@ body {
 }
 
 /* Изменение направления плиток при расширенном сайдбаре */
-.sidebar.expanded .tile {
+.sidebar.expanded .sidebar-tile {
     flex-direction: row; /* Выстраиваем в строку */
     align-items: center; /* Центрируем вертикально */
 }
 
-.tile img {
+.sidebar-tile img {
     width: 30px;
     height: 30px;
     margin-right: 10px; /* Отступ между изображением и текстом */
 }
 
-.tile span {
+.sidebar-tile span {
     color: white;
     display: none; /* Скрыть текст по умолчанию */
 }
 
-.sidebar.expanded .tile span {
+.sidebar.expanded .sidebar-tile span {
     display: block; /* Показать текст при расширенном сайдбаре */
 }
 
-.tile:hover {
+.sidebar-tile:hover {
     background-color: #555;
 }
 
@@ -95,3 +95,5 @@ body {
     margin-top: 10px;
     transition: transform 0.3s;
 }
+
+

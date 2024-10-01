@@ -1,0 +1,109 @@
+/* styles.css */
+
+/* Общие стили для sign in up */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Общая ширина формы */
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+p {
+    margin-bottom: 30px;
+    color: #777;
+}
+
+.form-group, .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+input {
+    width: 100%; /* Полная ширина */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+button, .submit-button, .button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    background-color: #28a745; /* Зеленый фон */
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover, .submit-button:hover, .button:hover {
+    background-color: #218838; /* Темнее на наведение */
+}
+
+.alternative {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+.alternative a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.alternative a:hover {
+    text-decoration: underline;
+}
+
+.google-button {
+    background-color: #db4437; /* Красный цвет Google */
+}
+
+.google-button:hover {
+    background-color: #c13529; /* Темнее при наведении */
+}
+
+.button-container {
+    display: flex;                /* Используем flexbox */
+    flex-direction: column;      /* Располагаем элементы вертикально */
+    gap: 10px;                   /* Отступ между кнопками (можно изменить по желанию) */
+}
+
+.button {
+    text-decoration: none;  /* Убираем подчеркивание для кнопок */
+}

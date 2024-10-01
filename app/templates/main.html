@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайдбар как в Obsidian с кнопкой внутри</title>
+    <title>ToDoFam</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main-style.css') }}">
 </head>
-<body>
 
+<body>
     <!-- Основной контент -->
     <div class="content" id="content">
         <h1>Welcome to ToDoFam</h1>
@@ -17,29 +17,19 @@
 
     <!-- Сайдбар -->
     <div class="sidebar" id="sidebar">
-        <!-- Кнопка для открытия/закрытия сайдбара -->
-        <!-- <button class="toggle-btn" onclick="toggleSidebar()">☰</button> -->
-        
-        <div class="tile" onclick="toggleSidebar()">
-            <img src="https://via.placeholder.com/30" alt="Иконка меню">
-            <span><p href="page1.html">Roll</p></span>
+        <div class="sidebar-tile" onclick="toggleSidebar()">
+            <img src="{{ url_for('static', filename='hamburger-icon.png') }}" alt="Иконка меню">
+            <span><p href="page1.html">Menu</p></span>
         </div>
 
-        <div class="tile" onclick="location.href='page13.html';">
-            <img src="https://via.placeholder.com/30" alt="Иконка 1">
-            <span><p href="page1.html">Groups</p></span>
-        </div>
-
-        <div class="tile" onclick="location.href='page23.html';">
-            <img src="{{ url_for('static', filename='loop.png') }}" alt="Иконка 2">
+        <div class="sidebar-tile" onclick="location.href='page23.html';">
+            <img src="{{ url_for('static', filename='loop.png') }}" alt="Иконка поиск">
             <span><p href="page2.html">Search</p></span>
         </div>
-
     </div>
 
     <script>
-        localStorage.setItem("token", "{{acces_token}}")
-        console.log('Token saved', localStorage.getItem('token'))
+        // TODO Добавить в отдельный файл
         function toggleSidebar() {
             var sidebar = document.getElementById("sidebar");
             var content = document.getElementById("content");

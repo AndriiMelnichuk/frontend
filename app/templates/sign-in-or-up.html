@@ -4,72 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoFam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='sign-in-up.css') }}">
 </head>
 
-<style>
-    * {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    text-align: center;
-    background-color: white;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-p {
-    margin-bottom: 30px;
-    color: #777;
-}
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.button {
-    padding: 15px 25px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    background-color: #007BFF;
-    text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-.button:hover {
-    background-color: #0056b3;
-}
-
-.google-button {
-    background-color: #db4437; /* Красный цвет Google */
-}
-
-.google-button:hover {
-    background-color: #c13529; /* Темнее при наведении */
-}
-
-</style>
 
 <body>
     <div class="container">
