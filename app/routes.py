@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
-from flask_jwt_extended import JWTManager, get_jwt_identity, verify_jwt_in_request, exceptions, create_access_token
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
 
 from app.utils import Validator, InternetTalker
 
@@ -39,6 +38,26 @@ def validateSignIn():
     if error_ans != '':
         return render_template('sign-in.html', error_message=error_ans, username=username, password=password)
     return redirect('/')
+
+@main.route('/groups')
+def groupsRouter():
+    groupNames = InternetTalker.getGroupsNames()
+    return render_template('groups.html', groupNames=groupNames)
+
+@main.route('/search')
+def searchRoute():
+    return render_template('search.html')
+
+@main.route('/group/<groupName>')
+def selectGroup(groupName):
+    tasks = InternetTalker.getTasksFromGroup(groupName)
+    return render_template("group.html", groupName=groupName, tasks=tasks)
+
+@main.route('/completeTask/<task>/<groupName>')
+def completeTask(task, groupName):
+    InternetTalker.completeTask(task)
+    print(task)
+    return redirect(url_for('main.selectGroup', groupName=groupName))
 
 
 @main.route('/')

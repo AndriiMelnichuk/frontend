@@ -1,0 +1,23 @@
+
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-tile" onclick="toggleSidebar()">
+        <img src="{{ url_for('static', filename='img/hamburger-icon.png') }}" alt="Иконка меню">
+        <span><p href="page1.html">Menu</p></span>
+    </div>
+
+    <div class="sidebar-tile" onclick="location.href='/';">
+        <img src="{{ url_for('static', filename='img/home-icon.png') }}" alt="Главная">
+        <span><p>Home</p></span>
+    </div>
+
+    <div class="sidebar-tile" onclick="location.href='/search';">
+        <img src="{{ url_for('static', filename='img/loop.png') }}" alt="Иконка поиск">
+        <span><p>Search</p></span>
+    </div>
+
+    <div class="sidebar-tile" onclick="location.href='/groups';">
+        <img src="{{ url_for('static', filename='img/group-icon.png') }}" alt="Группы">
+        <span><p>Groups</p></span>
+    </div>
+</div>

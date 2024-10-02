@@ -1,4 +1,9 @@
 from flask import session
+from app.models import *
+
+def updateSession(username, token):
+        session['acces_token'] = token
+        session['username'] = username
 
 class InternetTalker:
     """
@@ -10,8 +15,6 @@ class InternetTalker:
 
     @staticmethod
     def isAccesToken():
-        print(session.get('acces_token', None))
-        print(session.get('acces_token', None) != None)
         return session.get('acces_token', None) != None
     
 
@@ -24,15 +27,31 @@ class InternetTalker:
     @staticmethod
     def isSignUpCorrect(username, email, password, password2):
         # TODO Здесь будет связь с микросервисом.
-        session['acces_token'] = 'some token'
+        updateSession(username,'someT')
         return True
 
 
     @staticmethod
     def isSignInCorrect(username, password):
         # TODO Здесь будет связь с микросервисом.
-        session['acces_token'] = 'some token'
+        updateSession(username,'someT2')
         return True
+    
+
+    @staticmethod
+    def getTasksFromGroup(groupName):
+        # TODO Здесь будет связь с микросервисом.
+        return [
+            Task('title 1', 'des 1', 'as 1', 'cr 1', 'st 1', '2024-2-2'),
+            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
+            Task('title 14', 'des 41', 'as 21', 'cr 11', 'st 91', '2024-2-2')
+        ]
+    
+
+    @staticmethod
+    def completeTask(task):
+        # TODO Связываемся с сервисом, после получения ответа отмечаем таску как выполненую.
+        pass
     
 
 class Validator:

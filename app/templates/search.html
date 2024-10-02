@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск Групп и Заданий</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+<body>
+
+
+<div class="content">
+    <h1>Поиск Групп и Заданий</h1>
+    
+    <form action="{{ url_for('main.searchRoute') }}" method="get" class="search-form">
+        <div class="form-group">
+            <label for="groupName">Название группы:</label>
+            <input type="text" id="groupName" name="groupName" placeholder="Введите название группы">
+        </div>
+
+        <div class="form-group">
+            <label for="taskName">Название задания:</label>
+            <input type="text" id="taskName" name="taskName" placeholder="Введите название задания">
+        </div>
+
+        <div class="form-group">
+            <label for="assignedTo">Назначено на:</label>
+            <input type="text" id="assignedTo" name="assignedTo" placeholder="Введите имя исполнителя">
+        </div>
+
+        <button type="submit" class="search-button">Поиск</button>
+    </form>
+
+    <div class="results">
+        <h2>Результаты поиска:</h2>
+        <div class="group-results">
+            <!-- Здесь будут отображаться группы -->
+            <!-- {% for group in groups %}
+                <div class="group-card">
+                    <h3>{{ group.name }}</h3>
+                    <p>{{ group.description }}</p>
+                    <a href="{{ url_for('main.group', groupName=group.name) }}" class="view-button">Посмотреть</a>
+                </div>
+            {% endfor %} -->
+        </div>
+
+        <div class="task-results">
+            <!-- Здесь будут отображаться задания -->
+            <!-- {% for task in tasks %}
+                <div class="task-card">
+                    <h4>{{ task.title }}</h4>
+                    <p>Description: {{ task.description }}</p>
+                    <span>Assigned to: {{ task.assigned }}</span>
+                    <span>Created by: {{ task.created }}</span>
+                </div>
+            {% endfor %} -->
+        </div>
+    </div>
+</div>
+
+    <!-- Сайдбар -->
+    {%include 'sidebar.html'%}
+</body>
+</html>

@@ -97,3 +97,83 @@ body {
 }
 
 
+/* Стиль для плашек групп*/
+.group-container {
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение кнопок */
+    width: 100%; /* Контейнер занимает всю ширину */ 
+}
+
+.group-element {
+    width: 75%; /* Кнопки занимают 75% ширины контейнера */
+    height: 30px;
+    padding: 15px;
+    line-height: 30px;
+    align-items: center;
+    font-size: 16px;
+    color: #333; /* Цвет текста */
+    background-color: #f8f8f8; /* Светло-серый фон (почти белый) */
+    border: 2px solid #ccc; /* Серая рамка */
+    border-radius: 15px; /* Закругленные углы */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* Плавный переход при наведении */
+    text-align: left;
+    margin-bottom: 15px; /* Отступ между кнопками */
+    margin-left: 20px; /* Отступ от левого края */
+    text-decoration: none;
+}
+
+.group-element:hover {
+    background-color: #e0e0e0; /* Фон становится темнее при наведении */
+    color: #000; /* Текст становится темнее */
+}
+
+/* Карточки задач */
+.tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.task-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2); /* Тень сверху */
+    padding: 20px;
+}
+
+.task-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.task-card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.task-info {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+/* Кнопка "Отметить как выполненно" */
+.complete-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Убирает подчеркивание */
+    margin-top: 15px; /* Отступ сверху */
+    display: inline-block; /* Убедитесь, что элемент ведет себя как блочный */
+}
+
+.complete-button:hover {
+    background-color: #218838;
+}

@@ -11,13 +11,21 @@
 
 <body>
     <!-- Основной контент -->
+     
     <div class="content" id="content">
-        <h1>Welcome to ToDoFam</h1>
-        <p>Это главная страница с содержимым. Здесь может быть текст, изображения, видео и другой контент.</p>
+        <h1>Your groups</h1>
+        <div class="group-container">
+            {% for groupName in groupNames %}
+                <a type="button" class="group-element" href="{{ url_for('main.selectGroup', groupName=groupName) }}">{{ groupName }}</a>
+            {% endfor %}
+        </div>
     </div>
+     
+
 
     <!-- Сайдбар -->
      {%include 'sidebar.html'%}
+
 
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoFam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
+    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+</head>
+
+<body>
+    <!-- Основной контент -->
+    <div class="content" id="content">
+        <div class="tasks">
+            <h1>{{groupName}}</h1>
+            {% for task in tasks%}
+                <div class="task-card">
+                    <h2>{{task.title}}</h2>
+                    <p>Description {{task.title}}: {{task.description}}</p>
+                    <div class="task-info">
+                        <span>Assigned to: {{task.assigned}}</span> | 
+                        <span>Created by: {{task.created}}</span> |
+                        <span>Complete before: {{task.date}}</span>
+                    </div>
+                    <a type="button" class="complete-button" href="{{ url_for('main.completeTask', task=task, groupName=groupName) }}">Complete</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Сайдбар -->
+     {%include 'sidebar.html'%}
+
+</body>
+</html>
