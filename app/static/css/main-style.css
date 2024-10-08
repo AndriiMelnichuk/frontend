@@ -177,3 +177,91 @@ body {
 .complete-button:hover {
     background-color: #218838;
 }
+
+.create-group {
+    background-color: #28a745;
+    color: white;
+    border: none;
+
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    margin-top: 15px;
+    margin-bottom: 15px; /* Отступ снизу */
+    width: 150px; /* Фиксированная ширина кнопки */
+    height: 50px; /* Фиксированная высота кнопки */
+    display: flex; /* Используем flex для выравнивания содержимого */
+    justify-content: center; /* Горизонтальное выравнивание текста по центру */
+    align-items: center; /* Вертикальное выравнивание текста по центру */
+    align-self: flex-end; /* Выровнять кнопку по правому краю */
+    margin-right: 20vw; /* Отступ справа 25% от ширины экрана */
+}
+
+.create-group:hover {
+    background-color: #218838;
+}
+
+.create-group-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Убирает подчеркивание */
+    margin-top: 15px; /* Отступ сверху */
+    display: inline-block; /* Убедитесь, что элемент ведет себя как блочный */
+}
+
+.create-group-button:hover {
+    background-color: #218838;
+}
+
+.delete-group{
+    background-color: #ff0000d7;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    max-width: 150px; /* Ограничиваем максимальную ширину кнопки */
+    text-decoration: none; /* Убирает подчеркивание */
+}
+
+.user-item{
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2); /* Тень сверху */
+    padding: 20px;
+    margin-top: 15px; /* Отступ сверху */
+    justify-content: space-between; /* Разделить текст и кнопку на разные края */
+    display: flex;
+}
+
+.delete-user{
+    background-color: #ff0000d7;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 20px;
+    cursor: pointer;
+    max-width: 150px; /* Ограничиваем максимальную ширину кнопки */
+    text-decoration: none; /* Убирает подчеркивание */
+
+}
+
+.delete-task{
+    background-color: #ff0000d7;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Убирает подчеркивание */
+    margin-top: 15px; /* Отступ сверху */
+    display: inline-block; /* Убедитесь, что элемент ведет себя как блочный */
+}

@@ -15,6 +15,7 @@
     <div class="content" id="content">
         <h1>Your groups</h1>
         <div class="group-container">
+            <a type="button" class="create-group" id="openModal">Create group</a>
             {% for groupName in groupNames %}
                 <a type="button" class="group-element" href="{{ url_for('main.selectGroup', groupName=groupName) }}">{{ groupName }}</a>
             {% endfor %}
@@ -25,6 +26,7 @@
 
     <!-- Сайдбар -->
      {%include 'sidebar.html'%}
+     {%include 'create-group-modal.html'%}
 
 
 </body>

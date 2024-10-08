@@ -9,11 +9,44 @@
     <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </head>
 
+<style>
+    .head-container{
+        display: flex;
+        justify-content: space-between; /* Разделить текст и кнопку на разные края */
+        align-items: center; /* Выровнять элементы по вертикали на одном уровне */
+        width: 100%; /* Контейнер занимает всю ширину экрана */
+    }
+    .button-container {
+            display: flex;
+            gap: 10px; /* Промежуток между кнопками */
+        }
+</style>
+
 <body>
     <!-- Основной контент -->
     <div class="content" id="content">
         <div class="tasks">
+            <div class="head-container">
             <h1>{{groupName}}</h1>
+            <div class="button-container"> 
+                <a type="button" class="delete-group" id="openModal">
+                    {% if isAdmin %} 
+                        Menege users
+                    {% else %}
+                        Users
+                    {% endif %}
+                </a>
+                <a type="button" href="/deleteGroup/{{groupName}}" class="delete-group">
+                    {% if isAdmin %} 
+                        Delete group
+                    {% else %}
+                        Leave group
+                    {% endif %}
+                </a>
+            </div>
+            
+        </div>
+            
             {% for task in tasks%}
                 <div class="task-card">
                     <h2>{{task.title}}</h2>
@@ -24,11 +57,16 @@
                         <span>Complete before: {{task.date}}</span>
                     </div>
                     <a type="button" class="complete-button" href="{{ url_for('main.completeTask', task=task, groupName=groupName) }}">Complete</a>
+                    {% if isAdmin %}
+                    <a type="button" class="delete-task" href="{{ url_for('main.deleteTask', task=task, groupName=groupName) }}">Delete</a>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
     </div>
 
+    <!-- Модальное окно -->
+     {% include 'users-at-group-modal.html' %}
     <!-- Сайдбар -->
      {%include 'sidebar.html'%}
 

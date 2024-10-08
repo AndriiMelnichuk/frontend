@@ -51,14 +51,42 @@ def searchRoute():
 @main.route('/group/<groupName>')
 def selectGroup(groupName):
     tasks = InternetTalker.getTasksFromGroup(groupName)
-    return render_template("group.html", groupName=groupName, tasks=tasks)
+    return render_template("group.html", groupName=groupName, tasks=tasks, isAdmin=InternetTalker.isAdministrator(groupName))
 
 @main.route('/completeTask/<task>/<groupName>')
 def completeTask(task, groupName):
-    InternetTalker.completeTask(task)
-    print(task)
+    InternetTalker.completeTask(task, groupName)
     return redirect(url_for('main.selectGroup', groupName=groupName))
 
+@main.route('/createGroup', methods=['POST'])
+def createNewGroupRoute():
+    groupName = request.form["GroupName"]
+    InternetTalker.createGroup(groupName)
+    print(groupName)
+    return redirect(url_for('main.selectGroup', groupName=groupName))
+
+@main.route('/deleteGroup/<groupName>')
+def deleteGroupRoute(groupName):
+    InternetTalker.deleteGroup(groupName)
+    return redirect('/groups')
+
+@main.route('/users-at-group/<groupName>')
+def userAtGroupRoute(groupName):
+    users = InternetTalker.getUsersAtGroup(groupName)
+    isAdmin = InternetTalker.isAdministrator(groupName)
+    return jsonify(users, isAdmin)
+
+
+@main.route('/deleteTask/<task>/<groupName>')
+def deleteTask(task, groupName):
+    InternetTalker.deleteTask(task, groupName)
+    return redirect(url_for('main.selectGroup', groupName=groupName))
+
+                    
+@main.route('/deleteUserFromGroup/<groupName>/<username>')
+def deleteUserFromGroupRoute(groupName, username):
+    InternetTalker.deleteUserFromGroup(groupName, username)
+    return redirect(url_for('main.selectGroup', groupName=groupName))
 
 @main.route('/')
 def index():

@@ -21,7 +21,7 @@ class InternetTalker:
     @staticmethod
     def getGroupsNames():
         # TODO Данный метод будет связываться с сервисом. Сейчас вернутся псевдо группы.
-        return ['group 1', 'group 2', 'group 3']
+        return ['group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6']
     
 
     @staticmethod
@@ -49,10 +49,42 @@ class InternetTalker:
     
 
     @staticmethod
-    def completeTask(task):
+    def completeTask(task, groupName):
         # TODO Связываемся с сервисом, после получения ответа отмечаем таску как выполненую.
         pass
+
+    @staticmethod
+    def deleteTask(task, groupName):
+        # TODO Связываемся с сервисом, после получения ответа отмечаем таску как выполненую.
+        pass
+
+    @staticmethod
+    def createGroup(groupName):
+        # TODO Отправляем запрос и добавляем группу
+        pass
     
+
+    @staticmethod
+    def isAdministrator(groupName):
+        # TODO проверяем статус пользователя
+        return True
+    
+    @staticmethod 
+    def deleteGroup(groupName):
+        # TODO Запрос на сервер.
+        # Если одминистратор -> Полное удаление группы
+        # Иначе -> Выход из группы.
+        pass
+
+    @staticmethod
+    def getUsersAtGroup(groupName):
+        # TODO
+        return['user 1', 'user 2', 'user 3', 'user 12', 'user 22', 'user 32']
+
+    @staticmethod
+    def deleteUserFromGroup(groupName, username):
+        # TODO
+        pass
 
 class Validator:
     """Класс для валидации данных"""
@@ -61,9 +93,9 @@ class Validator:
         error_messages = []
         error_ans = ''
 
-        if len(username) < 6:
+        if len(username) < 4:
             error_messages.append('Username too short.')
-        if len(password) < 6:
+        if len(password) < 4:
             error_messages.append('Password too short.')
         if password != password2:
             error_messages.append('Password and confirming password not equal.')
@@ -80,7 +112,7 @@ class Validator:
     @staticmethod
     def getSignInErrorMessage(username, password):
         error_ans = ''
-        if len(username) < 6 or len(password) < 6:
+        if len(username) < 4 or len(password) < 4:
             error_ans = 'Not correct username or password'
         elif not InternetTalker.isSignInCorrect(username, password):
             error_ans = 'Not correct username or password'
