@@ -7,93 +7,10 @@ body {
 
 /* Основной контент */
 .content {
-    padding: 20px;
-    margin-left: 60px; /* Узкий сайдбар по умолчанию */
-    transition: margin-left 0.3s;
-}
-
-/* Сайдбар */
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 60px; /* Узкий сайдбар */
-    height: 100%;
-    background-color: #333;
-    transition: width 0.3s;
-    overflow-x: hidden;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Горизонтальное центрирование */
-}
-
-/* Состояние сайдбара, когда он расширен */
-.sidebar.expanded {
-    width: 250px;
-}
-
-/* Заголовок сайдбара */
-.sidebar h2 {
-    color: white;
-    text-align: center;
-    margin-top: 20px;
-    display: none; /* Скрыть заголовок по умолчанию */
-}
-
-.sidebar.expanded h2 {
-    display: block; /* Показать заголовок при расширенном сайдбаре */
-}
-
-/* Плитки */
-.sidebar-tile {
-    display: flex;
-    flex-direction: column; /* Выстраиваем изображения и текст по вертикали */
-    align-items: center;
-    margin-bottom: 15px;
-    background-color: #444;
+    margin-top: 60px; /* Отступ сверху, чтобы текст не заезжал под заголовок */
+    margin-left: 70px; /* Отступ слева, чтобы текст не заезжал под сайдбар */
     padding: 10px;
-    width: 90%;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-    cursor: pointer;
-}
-
-/* Изменение направления плиток при расширенном сайдбаре */
-.sidebar.expanded .sidebar-tile {
-    flex-direction: row; /* Выстраиваем в строку */
-    align-items: center; /* Центрируем вертикально */
-}
-
-.sidebar-tile img {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px; /* Отступ между изображением и текстом */
-}
-
-.sidebar-tile span {
-    color: white;
-    display: none; /* Скрыть текст по умолчанию */
-}
-
-.sidebar.expanded .sidebar-tile span {
-    display: block; /* Показать текст при расширенном сайдбаре */
-}
-
-.sidebar-tile:hover {
-    background-color: #555;
-}
-
-
-/* Кнопка для открытия/закрытия сайдбара */
-.toggle-btn {
-    background-color: #444;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: transform 0.3s;
+    transition: margin-left 0.3s; /* Плавное изменение отступа */
 }
 
 
@@ -133,6 +50,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    margin-top: 50px;
 }
 
 .task-card {
@@ -220,8 +138,8 @@ body {
 }
 
 .delete-group{
-    background-color: #ff0000d7;
-    padding: 10px 20px;
+   background-color: #ff0000d7;
+     padding: 10px 20px;
     color: white;
     border: none;
     border-radius: 5px;
@@ -229,6 +147,17 @@ body {
     max-width: 150px; /* Ограничиваем максимальную ширину кнопки */
     text-decoration: none; /* Убирает подчеркивание */
 }
+
+.manage-users{
+    background-color: #357ae8;
+      padding: 10px 20px;
+     color: white;
+     border: none;
+     border-radius: 5px;
+     cursor: pointer;
+     max-width: 150px; /* Ограничиваем максимальную ширину кнопки */
+     text-decoration: none; /* Убирает подчеркивание */
+ }
 
 .user-item{
     background-color: white;

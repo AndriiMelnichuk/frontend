@@ -1,0 +1,49 @@
+/* Стили для заголовка */
+.head-container {
+    display: flex;
+    justify-content: flex-start; /* Выровнять элементы по началу */
+    align-items: center;
+    position: fixed;
+    top: 0; /* Фиксированное положение */
+    left: 60px; /* Отступ для свернутого сайдбара */
+    width: calc(100% - 60px); /* Ширина для заголовка */
+    background-color: white;
+    padding: 10px;
+    /* z-index: 1000; */
+    transition: margin-left 0.3s; /* Плавное изменение ширины и положения */
+    margin-bottom: 30px;
+}
+
+/* Когда сайдбар развернут */
+.sidebar.expanded + .head-container {
+    left: 250px; /* Изменяем отступ в зависимости от ширины развернутого сайдбара */
+    width: calc(100% - 250px); /* Увеличиваем ширину заголовка */
+}
+
+/* Основное содержимое страницы */
+.content {
+    margin-top: 60px; /* Отступ сверху, чтобы текст не заезжал под заголовок */
+    margin-left: 70px; /* Отступ слева, чтобы текст не заезжал под сайдбар */
+    padding: 10px;
+    transition: margin-left 0.3s; /* Плавное изменение отступа */
+}
+
+/* Когда сайдбар развернут */
+.sidebar.expanded + .head-container + .content {
+    margin-left: 270px; /* Увеличиваем отступ слева, когда сайдбар развернут */
+}
+
+.head-container .button-container {
+    display: flex;
+    gap: 10px; /* Промежуток между кнопками */
+    justify-content: flex-end; /* Выравнивание по правому краю */
+    width: 100%; /* Ширина контейнера */
+    margin-right: 20px;
+}
+
+
+
+.head-container .group-name {
+    white-space: nowrap; /* Запретить перенос текста на новую строку */
+    
+}

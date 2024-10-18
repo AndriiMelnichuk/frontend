@@ -88,6 +88,14 @@ def deleteUserFromGroupRoute(groupName, username):
     InternetTalker.deleteUserFromGroup(groupName, username)
     return redirect(url_for('main.selectGroup', groupName=groupName))
 
+@main.route('/search-tasks-in-group/<groupName>')
+def searchTasksInGroupRoute(groupName):
+    # tasks = InternetTalker.searchTasksInGroup()
+    print('hi')
+    print(request.args)
+    return redirect(f'/group/{groupName}')
+    # return render_template("group.html", groupName=groupName, tasks=tasks, isAdmin=InternetTalker.isAdministrator(groupName))
+
 @main.route('/')
 def index():
     if InternetTalker.isAccesToken():
