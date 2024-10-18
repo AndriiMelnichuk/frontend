@@ -21,7 +21,7 @@ class InternetTalker:
     @staticmethod
     def getGroupsNames():
         # TODO Данный метод будет связываться с сервисом. Сейчас вернутся псевдо группы.
-        return ['group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6']
+        return ['group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6', 'group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6']
     
 
     @staticmethod
@@ -44,8 +44,14 @@ class InternetTalker:
         return [
             Task('title 1', 'des 1', 'as 1', 'cr 1', 'st 1', '2024-2-2'),
             Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
+            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
+            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
+            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
+            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
             Task('title 14', 'des 41', 'as 21', 'cr 11', 'st 91', '2024-2-2')
         ]
+    
+    
     
 
     @staticmethod

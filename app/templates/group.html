@@ -5,48 +5,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoFam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filter.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
-    <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/selector.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/head-container.css') }}">
 </head>
 
-<style>
-    .head-container{
-        display: flex;
-        justify-content: space-between; /* Разделить текст и кнопку на разные края */
-        align-items: center; /* Выровнять элементы по вертикали на одном уровне */
-        width: 100%; /* Контейнер занимает всю ширину экрана */
-    }
-    .button-container {
-            display: flex;
-            gap: 10px; /* Промежуток между кнопками */
-        }
-</style>
 
 <body>
+    <!-- Сайдбар -->
+        {%include 'sidebar.html'%}
+
+    <!-- Head container -->
+    <div class="head-container">
+        <h1 class="group-name">{{groupName}}</h1> 
+         
+        <div class="button-container"> 
+            <a type="button" class="manage-users" id="openModal">
+                {% if isAdmin %} 
+                    Menege users
+                {% else %}
+                    Users
+                {% endif %}
+            </a>
+            <a type="button" href="/deleteGroup/{{groupName}}" class="delete-group">
+                {% if isAdmin %} 
+                    Delete group
+                {% else %}
+                    Leave group
+                {% endif %}
+            </a> 
+        </div>
+    </div>
+
     <!-- Основной контент -->
     <div class="content" id="content">
-        <div class="tasks">
-            <div class="head-container">
-            <h1>{{groupName}}</h1>
-            <div class="button-container"> 
-                <a type="button" class="delete-group" id="openModal">
-                    {% if isAdmin %} 
-                        Menege users
-                    {% else %}
-                        Users
-                    {% endif %}
-                </a>
-                <a type="button" href="/deleteGroup/{{groupName}}" class="delete-group">
-                    {% if isAdmin %} 
-                        Delete group
-                    {% else %}
-                        Leave group
-                    {% endif %}
-                </a>
+
+        <form action="/search-tasks-in-group/{{groupName}}" method="get">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" name="query" placeholder="Search..."> <!-- Добавлен атрибут name -->
+                    <button class="filter-button" type="button" onclick="toggleFilter()">Filter</button>
+                    <button type="submit">Search</button> <!-- Убрано href, так как это не требуется для кнопки submit -->
+                </div>
+        
+                <div class="filter" id="filter">
+                    <label for="selected-assigned-to">Assigned to:</label>
+                    <div class="select-box" id="assigned-to-select-box">
+                        <input type="text" id="selected-assigned-to" name="assigned_to" readonly placeholder="Assigned-to"> <!-- Добавлен атрибут name -->
+                        <div class="options-container" id="assigned-to-name-container"></div>
+                    </div>
+        
+                    <label for="selected-created-by">Created by:</label>
+                    <div class="select-box" id="created-by-select-box">
+                        <input type="text" id="selected-created-by" name="created_by" readonly placeholder="Created-by"> <!-- Добавлен атрибут name -->
+                        <div class="options-container" id="created-by-name-container"></div>
+                    </div>
+        
+                    <label for="due-date">Complete before:</label>
+                    <input type="date" id="due-date" name="complete_before" placeholder="Complete before" /> <!-- Добавлен атрибут name -->
+        
+                    <label for="status">Status:</label>
+                    <select id="status" name="status"> <!-- Добавлен атрибут name -->
+                        <option value="">None</option>
+                        <option value="complete">Completed</option>
+                        <option value="not complete">In process</option>
+                    </select>
+                </div>
             </div>
-            
-        </div>
-            
+        </form>
+        
+
+        <div class="tasks">
             {% for task in tasks%}
                 <div class="task-card">
                     <h2>{{task.title}}</h2>
@@ -66,9 +99,168 @@
     </div>
 
     <!-- Модальное окно -->
-     {% include 'users-at-group-modal.html' %}
-    <!-- Сайдбар -->
-     {%include 'sidebar.html'%}
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-data"> <!-- Контейнер для данных -->
+                <h1>
+                    Users
+                </h1>
+            </div> 
+        </div>
+    </div>
+
 
 </body>
+
+
 </html>
+
+<!-- main script -->
+<script>
+    var assignedToContainer = document.getElementById("assigned-to-name-container");
+    var createdByContainer = document.getElementById("created-by-name-container");
+    // Получаем элементы
+    var modal = document.getElementById("myModal");
+    var openModalBtn = document.getElementById("openModal");
+    var span = document.getElementsByClassName("close")[0];
+    var modalData = document.getElementById("modal-data");
+    var groupName = "{{groupName}}";
+
+    const selectBoxAssignedTo = document.getElementById('assigned-to-select-box');
+    const inputAssignedTo = document.getElementById('selected-assigned-to');
+    const inputCreatedBy = document.getElementById("selected-created-by");
+    let selectedAssignedToValues = [];
+    let selectedCreatedBy = [];
+    
+    const selectBoxCreatedBy = document.getElementById('created-by-select-box');
+    
+    const optionsContainer = document.querySelector('.options-container');
+    const options = optionsContainer.querySelectorAll('div');
+    
+    window.addEventListener('DOMContentLoaded', function (event) {
+        inputAssignedTo.value = "";
+        inputCreatedBy.value = "";
+    });
+
+
+    // Добавляем пользователей в селектор и привязываем события
+    function addUsersToSelector(user, container, selectedList, input) {
+        var userDiv = document.createElement('div');
+        userDiv.textContent = user;
+        userDiv.dataset.value = user;
+        container.appendChild(userDiv);
+
+        // Привязываем событие клика к вновь добавленному элементу
+        userDiv.addEventListener('click', () => {
+            const value = userDiv.getAttribute('data-value');
+            if (selectedList.includes(value)) {
+                selectedList.splice(selectedList.indexOf(value), 1);
+                userDiv.style.backgroundColor = ''; // Сбросить фон
+            } else {
+                selectedList.push(value);
+                userDiv.style.backgroundColor = '#ddd'; // Выделить как выбранное
+            }
+            input.value = selectedList.join(', '); // Обновить значение в поле
+        });
+    }
+    // Добавляем пользователей в модальное окно
+    function addElementsToModal(user, isAdmin){
+                    var userDiv = document.createElement('div');
+                    userDiv.classList.add('user-item');
+                    var u = document.createElement('p')
+                    u.textContent = user
+                    userDiv.appendChild(u)
+                    
+                    if (isAdmin){
+                        var deleteButton = document.createElement('a');
+                        deleteButton.classList.add('delete-user')
+                        deleteButton.textContent = 'Delete';
+                        deleteButton.href ='/deleteUserFromGroup/'+groupName+"/"+user;
+                        deleteButton.classList.add('delete-button');
+                        userDiv.appendChild(deleteButton)
+                    }
+
+                    modalData.appendChild(userDiv)
+                }
+    // Выполняем AJAX-запрос для получения данных
+    fetch('/users-at-group/' + groupName)
+        .then(response => response.json())
+        .then(data => {
+            const users = data[0];
+            const isAdmin = data[1];
+
+            users.forEach(user => {
+                addUsersToSelector(user, assignedToContainer, selectedAssignedToValues, inputAssignedTo); // Добавляем пользователей в селектор
+                addUsersToSelector(user, createdByContainer, selectedCreatedBy, inputCreatedBy);
+                addElementsToModal(user, isAdmin); // Добавляем пользователей в модальное окно
+            });
+        });
+
+
+        
+</script>
+
+<!-- filter script -->
+<script>
+    // Функция для переключения видимости фильтра
+    function toggleFilter() {
+        const filter = document.getElementById('filter');
+        filter.style.display = filter.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Закрытие фильтра, если кликнули вне его
+    document.addEventListener('click', function(event) {
+        const filter = document.getElementById('filter');
+        const filterButton = document.querySelector('.filter-button');
+        const isClickInside = filter.contains(event.target) || filterButton.contains(event.target);
+        if (!isClickInside) {
+            filter.style.display = 'none'; // Скрыть фильтр
+        }
+    });
+
+    // Функция для выбора фильтра
+    function selectFilter(filterName) {
+        alert(`Выбран ${filterName}`);
+        toggleFilter(); // Закрыть фильтр после выбора
+    }
+</script>
+
+<!-- selector script -->
+<script>
+    function selectorSetting(selector){
+        selector.addEventListener('click', () => {
+            selector.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!selector.contains(event.target)) {
+            selector.classList.remove('active');
+        }
+    });
+    }
+    selectorSetting(selectBoxAssignedTo);
+    selectorSetting(selectBoxCreatedBy);
+
+</script>
+
+
+<!-- modal script -->
+<script>
+    // Открываем модальное окно при нажатии на кнопку
+    openModalBtn.onclick = function() {
+        modal.style.display = "flex";
+        }
+
+    // Закрываем модальное окно при нажатии на крестик
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Закрываем окно, если кликнуть за его пределами
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>

@@ -1,0 +1,56 @@
+.filter {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+.filter label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.filter select,
+.filter input[type="text"],
+.filter input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.select-box {
+    position: relative;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.options-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 150px;
+    border: 1px solid #ccc;
+    background-color: white;
+    z-index: 99;
+    overflow-y: auto;
+}
+
+.options-container div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.options-container div:hover {
+    background-color: #ddd;
+}

@@ -1,5 +1,19 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+<script>
+    function toggleSidebar() {
+    var sidebar = document.getElementById("sidebar");
+    var content = document.getElementById("content");
 
+    sidebar.classList.toggle("expanded");
 
+    // Сдвигаем контент вправо, если сайдбар открыт
+    if (sidebar.classList.contains("expanded")) {
+        content.style.marginLeft = "250px";
+    } else {
+        content.style.marginLeft = "60px"; // Возвращаем в исходное положение
+    }
+}
+</script>
 <div class="sidebar" id="sidebar">
     <div class="sidebar-tile" onclick="toggleSidebar()">
         <img src="{{ url_for('static', filename='img/hamburger-icon.png') }}" alt="Иконка меню">
