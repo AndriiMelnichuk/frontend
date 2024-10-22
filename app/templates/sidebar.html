@@ -1,37 +1,44 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar.css') }}">
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/sidebar.css') }}"
+/>
 <script>
     function toggleSidebar() {
-    var sidebar = document.getElementById("sidebar");
-    var content = document.getElementById("content");
+        var sidebar = document.getElementById("sidebar");
+        var content = document.getElementById("content");
 
-    sidebar.classList.toggle("expanded");
+        sidebar.classList.toggle("expanded");
 
-    // Сдвигаем контент вправо, если сайдбар открыт
-    if (sidebar.classList.contains("expanded")) {
-        content.style.marginLeft = "250px";
-    } else {
-        content.style.marginLeft = "60px"; // Возвращаем в исходное положение
+        // Сдвигаем контент вправо, если сайдбар открыт
+        if (sidebar.classList.contains("expanded")) {
+            content.style.marginLeft = "250px";
+        } else {
+            content.style.marginLeft = "60px"; // Возвращаем в исходное положение
+        }
     }
-}
 </script>
 <div class="sidebar" id="sidebar">
     <div class="sidebar-tile" onclick="toggleSidebar()">
-        <img src="{{ url_for('static', filename='img/hamburger-icon.png') }}" alt="Иконка меню">
+        <img
+            src="{{ url_for('static', filename='img/hamburger-icon.png') }}"
+            alt="Иконка меню"
+        />
         <span><p href="page1.html">Menu</p></span>
     </div>
 
     <div class="sidebar-tile" onclick="location.href='/';">
-        <img src="{{ url_for('static', filename='img/home-icon.png') }}" alt="Главная">
+        <img
+            src="{{ url_for('static', filename='img/home-icon.png') }}"
+            alt="Главная"
+        />
         <span><p>Home</p></span>
     </div>
 
-    <div class="sidebar-tile" onclick="location.href='/search';">
-        <img src="{{ url_for('static', filename='img/loop.png') }}" alt="Иконка поиск">
-        <span><p>Search</p></span>
-    </div>
-
     <div class="sidebar-tile" onclick="location.href='/groups';">
-        <img src="{{ url_for('static', filename='img/group-icon.png') }}" alt="Группы">
+        <img
+            src="{{ url_for('static', filename='img/group-icon.png') }}"
+            alt="Группы"
+        />
         <span><p>Groups</p></span>
     </div>
 </div>
