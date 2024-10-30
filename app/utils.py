@@ -16,13 +16,16 @@ class InternetTalker:
     @staticmethod
     def isAccesToken():
         return session.get('acces_token', None) != None
-    
+
 
     @staticmethod
-    def getGroupsNames():
-        # TODO Данный метод будет связываться с сервисом. Сейчас вернутся псевдо группы.
-        return ['group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6', 'group 1', 'group 2', 'group 3', 'group 4', 'group 5', 'group 6']
-    
+    def getGroups():
+        return [
+            Group(1, 'title', 'admin'), 
+            Group(2, 'Group 2', 'user 1'),
+            Group(3, 'Group 3', 'user 2'),
+            Group(4, 'Group 4', 'user 3')
+        ]
 
     @staticmethod
     def isSignUpCorrect(username, email, password, password2):
@@ -42,13 +45,14 @@ class InternetTalker:
     def getTasksFromGroup(groupName):
         # TODO Здесь будет связь с микросервисом.
         return [
-            Task('title 1', 'des 1', 'as 1', 'cr 1', 'st 1', '2024-2-2'),
-            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
-            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
-            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
-            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
-            Task('title 2', 'des 2', 'as 1', 'cr 2', 'st 1', '2024-2-2'),
-            Task('title 14', 'des 41', 'as 21', 'cr 11', 'st 91', '2024-2-2')
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'cr 1', 'st 1', '2024-12-02'),
+            Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', 'st 1', '2024-02-02'),
+            Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
+            Task(4, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
+            Task(5, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
+            Task(6, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
+            Task(7, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
+            Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11', 'st 91', '2024-02-02')
         ]
     
     
@@ -92,6 +96,12 @@ class InternetTalker:
         # TODO
         pass
 
+
+    @staticmethod
+    def getGroupById(id):
+       # TODO
+       return Group(id, 'GroupById', 'AdminId')
+
 class Validator:
     """Класс для валидации данных"""
     @staticmethod
@@ -125,7 +135,10 @@ class Validator:
         return error_ans
         
 
-
+def decode_group(group_str):
+    group_str = group_str.replace("Group(", "").replace(')',"")
+    id, name, administrator = map(str.strip, group_str.split(', '))
+    return Group(id=int(id), name=name.split(), administrator=administrator.strip())
 
 
 

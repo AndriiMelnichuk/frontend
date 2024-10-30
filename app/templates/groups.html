@@ -10,14 +10,15 @@
 
 <body>
     <!-- Основной контент -->
-     
+
     <div class="content" id="content">
         <h1>Your groups</h1>
-        <div class="group-container">
+        <div class="group-container"  id="group-container">
             <a type="button" class="create-group" id="openModal">Create group</a>
-            {% for groupName in groupNames %}
-                <a type="button" class="group-element" href="{{ url_for('main.selectGroup', groupName=groupName) }}">{{ groupName }}</a>
-            {% endfor %}
+            <!-- {% for group in groups %}
+                
+                <a type="button" class="group-element" href="">{{group.name}}</a>
+            {% endfor %} -->
         </div>
     </div>
      
@@ -29,4 +30,22 @@
 
 
 </body>
+
+<script>
+    let cont = document.getElementById('group-container')
+    fetch('/groups/elements')
+        .then(r => r.json())
+        .then(data =>
+            data.forEach(d => {
+                var e = document.createElement('a')
+                e.text = d.name
+                e.classList.add('group-element')
+                
+                e.href = '/group/'+encodeURIComponent(d.name)+'?id='+encodeURIComponent(d.id)+'&admin='+encodeURIComponent(d.admin)
+                cont.appendChild(e)
+            }
+            )
+        )
+
+</script>
 </html>

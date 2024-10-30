@@ -14,24 +14,103 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/head-container.css') }}">
 </head>
 
+<style>
+    .My-form textarea {
+        width: 100%; /* Occupy most of the container width */
+        height: 200px; /* Set height */
+        border: 1px solid #ccc; /* Border */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 16px; /* Font size */
+        resize:none; /* Allow vertical resizing only */
+
+    }
+
+    .My-form .modal-input-text {
+        width: 100%; /* Input field width */
+        padding: 10px; /* Internal padding */
+        font-size: 16px; /* Text size */
+        border: 2px solid #ddd; /* Border color and thickness */
+        border-radius: 10px; /* Rounded corners */
+        outline: none; /* Remove standard outline */
+        transition: all 0.3s ease; /* Smooth transition on change */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow */
+        display: block; /* Make input fields block-level to place them below the label */
+        margin: 10px 0; /* Space between input and surrounding elements */
+    }
+
+    .My-form label {
+        display: block; /* Ensure labels are above the inputs */
+        font-size: 14px; /* Label text size */
+        font-weight: bold; /* Make labels bold */
+        margin-bottom: 5px; /* Space between label and input */
+        margin-left: 20px; /* Align with the input fields */
+    }
+
+    .My-form input[type="date"] {
+        width: 100%; /* Match other input widths */
+        padding: 10px; /* Internal padding */
+        font-size: 16px; /* Font size */
+        border: 2px solid #ddd; /* Border color */
+        border-radius: 10px; /* Rounded corners */
+        outline: none; /* Remove outline */
+        transition: all 0.3s ease; /* Smooth transition on hover */
+        margin: 10px 0; /* Spacing */
+        display: block; /* Block display for vertical layout */
+        
+    }
+
+    .My-form button.submit-button {
+        width: 84%; /* Slightly larger to align with input fields */
+        padding: 10px 0; /* Top and bottom padding */
+        font-size: 18px; /* Larger font size */
+        font-weight: bold; /* Bold font */
+        color: white; /* Button text color */
+        background-color: #28a745; /* Green background */
+        border: none; /* Remove border */
+        border-radius: 10px; /* Rounded corners */
+        cursor: pointer; /* Pointer on hover */
+        transition: background-color 0.3s ease; /* Smooth transition */
+        margin: 20px 20px 0; /* Align and space around the button */
+    }
+
+    button.submit-button:hover {
+        background-color: #218838; /* Darker green on hover */
+    }
+
+    .My-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .My-form .select-box{
+        margin-right: 22px;
+    }
+
+    .My-form .select-box  div{
+        width: 100%+20px;
+    }
+</style>
 
 <body>
     <!-- Сайдбар -->
         {%include 'sidebar.html'%}
-
     <!-- Head container -->
     <div class="head-container">
-        <h1 class="group-name">{{groupName}}</h1> 
+        <h1 class="group-name">{{group.name}}</h1> 
          
         <div class="button-container"> 
-            <a type="button" class="manage-users" id="openModal">
+            <a type="button" class="manage-users" id="openModalTasks">
+                Create task
+            </a>
+            <a type="button" class="manage-users" id="openModalUser">
                 {% if isAdmin %} 
                     Menege users
                 {% else %}
                     Users
                 {% endif %}
             </a>
-            <a type="button" href="/deleteGroup/{{groupName}}" class="delete-group">
+            <a type="button" href="/group/delete/{{group.id}}" class="delete-group">
                 {% if isAdmin %} 
                     Delete group
                 {% else %}
@@ -43,8 +122,8 @@
 
     <!-- Основной контент -->
     <div class="content" id="content">
-
-        <form action="/search-tasks-in-group/{{groupName}}" method="get">
+        <!-- Поиск задания -->
+				<form action="/task/search/{{group.id}}" method="get">
             <div class="search-container">
                 <div class="search-box">
                     <input type="text" name="query" placeholder="Search..."> <!-- Добавлен атрибут name -->
@@ -53,19 +132,19 @@
                 </div>
         
                 <div class="filter" id="filter">
-                    <label for="selected-assigned-to">Assigned to:</label>
+                    <label>Assigned to:</label>
                     <div class="select-box" id="assigned-to-select-box">
-                        <input type="text" id="selected-assigned-to" name="assigned_to" readonly placeholder="Assigned-to"> <!-- Добавлен атрибут name -->
-                        <div class="options-container" id="assigned-to-name-container"></div>
+                        <input type="text" name="assigned_to" readonly placeholder="Assigned-to"> <!-- Добавлен атрибут name -->
+                        <div class="options-container"></div>
                     </div>
-        
-                    <label for="selected-created-by">Created by:</label>
+
+                    <label>Created by:</label>
                     <div class="select-box" id="created-by-select-box">
-                        <input type="text" id="selected-created-by" name="created_by" readonly placeholder="Created-by"> <!-- Добавлен атрибут name -->
-                        <div class="options-container" id="created-by-name-container"></div>
+                        <input type="text" name="created_by" readonly placeholder="Created-by"> <!-- Добавлен атрибут name -->
+                        <div class="options-container"></div>
                     </div>
-        
-                    <label for="due-date">Complete before:</label>
+
+                    <label>Complete before:</label>
                     <input type="date" id="due-date" name="complete_before" placeholder="Complete before" /> <!-- Добавлен атрибут name -->
         
                     <label for="status">Status:</label>
@@ -78,31 +157,16 @@
             </div>
         </form>
         
-
+        <!-- Задания -->
         <div class="tasks">
-            {% for task in tasks%}
-                <div class="task-card">
-                    <h2>{{task.title}}</h2>
-                    <p>Description {{task.title}}: {{task.description}}</p>
-                    <div class="task-info">
-                        <span>Assigned to: {{task.assigned}}</span> | 
-                        <span>Created by: {{task.created}}</span> |
-                        <span>Complete before: {{task.date}}</span>
-                    </div>
-                    <a type="button" class="complete-button" href="{{ url_for('main.completeTask', task=task, groupName=groupName) }}">Complete</a>
-                    {% if isAdmin %}
-                    <a type="button" class="delete-task" href="{{ url_for('main.deleteTask', task=task, groupName=groupName) }}">Delete</a>
-                    {% endif %}
-                </div>
-            {% endfor %}
         </div>
     </div>
 
-    <!-- Модальное окно -->
-    <div id="myModal" class="modal">
+    <!-- Модальное окно пользователей-->
+    <div id="modalUsers" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <div id="modal-data"> <!-- Контейнер для данных -->
+            <div id="modal-data-user"> <!-- Контейнер для данных -->
                 <h1>
                     Users
                 </h1>
@@ -110,42 +174,96 @@
         </div>
     </div>
 
+    <!-- Модальное окно создания задания-->
+    <div id="modalTasks" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form class="My-form" action="/task/create/{{group.id}}">
+                <h1>Create task</h1>
+                
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" class="modal-input-text" placeholder="Title...">    
+                
+                    <label>Description:</label>
+                    <textarea placeholder="Description..."></textarea>
+                
+                    <label>Assign to:</label>
+                    <div class="select-box" id="create-task-select-box">
+                        <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to"> <!-- Добавлен атрибут name -->
+                        <div class="options-container"></div>
+                    </div>
+                
+                    <label>Complete before:</label>
+                    <input type="date">
+                
+                <button class="submit-button">Create</button>
+            </form>
+        </div>
+    </div>
 
-</body>
+    <!-- Модальное окно изменения задания -->
+    <div id="modalUpdateTask" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+                <form class="My-form">
+                    <h1>Create task</h1>
+                    
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" class="modal-input-text" placeholder="Title...">    
+                
+                    <label>Description:</label>
+                    <textarea placeholder="Description..."></textarea>
+                
+                    <label>Assign to:</label>
+                    <div class="select-box" id="update-task-select-box">
+                        <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to"> <!-- Добавлен атрибут name -->
+                        <div class="options-container"></div>
+                    </div>
+                
+                    <label>Complete before:</label>
+                    <input type="date">
+                    
+                    <button class="submit-button">Update</button>
+                </form>
+        </div>
+
+    </div>
+
 
 
 </html>
 
+
 <!-- main script -->
 <script>
-    var assignedToContainer = document.getElementById("assigned-to-name-container");
-    var createdByContainer = document.getElementById("created-by-name-container");
-    // Получаем элементы
-    var modal = document.getElementById("myModal");
-    var openModalBtn = document.getElementById("openModal");
-    var span = document.getElementsByClassName("close")[0];
-    var modalData = document.getElementById("modal-data");
-    var groupName = "{{groupName}}";
+    let userList = []
 
     const selectBoxAssignedTo = document.getElementById('assigned-to-select-box');
-    const inputAssignedTo = document.getElementById('selected-assigned-to');
-    const inputCreatedBy = document.getElementById("selected-created-by");
+    const selectBoxCreatedBy = document.getElementById('created-by-select-box');
+    const selectBoxCreateTask = document.getElementById('create-task-select-box');
+	const selectBoxUpdate = document.getElementById('update-task-select-box');
+    var groupName = "{{groupName}}";
+
+    
     let selectedAssignedToValues = [];
     let selectedCreatedBy = [];
-    
-    const selectBoxCreatedBy = document.getElementById('created-by-select-box');
-    
-    const optionsContainer = document.querySelector('.options-container');
-    const options = optionsContainer.querySelectorAll('div');
+    let selectedCreateTask =[]
+
+
+    var modalDataUser = document.getElementById("modal-data-user");
     
     window.addEventListener('DOMContentLoaded', function (event) {
-        inputAssignedTo.value = "";
-        inputCreatedBy.value = "";
+        document.querySelectorAll('input').forEach(input => input.value = ''); // Установить значение каждого input в пустую строку
+        document.querySelectorAll('textarea').forEach(input => input.value = '');
+
     });
 
 
     // Добавляем пользователей в селектор и привязываем события
-    function addUsersToSelector(user, container, selectedList, input) {
+    function addUsersToSelector(user, selectBox, selectedList) {
+        var input = selectBox.children[0];
+        var container = selectBox.children[1]
+
         var userDiv = document.createElement('div');
         userDiv.textContent = user;
         userDiv.dataset.value = user;
@@ -176,29 +294,88 @@
                         var deleteButton = document.createElement('a');
                         deleteButton.classList.add('delete-user')
                         deleteButton.textContent = 'Delete';
-                        deleteButton.href ='/deleteUserFromGroup/'+groupName+"/"+user;
+											deleteButton.href ='/group/delete/{{group.id}}';
                         deleteButton.classList.add('delete-button');
                         userDiv.appendChild(deleteButton)
                     }
 
-                    modalData.appendChild(userDiv)
+                    modalDataUser.appendChild(userDiv)
                 }
     // Выполняем AJAX-запрос для получения данных
-    fetch('/users-at-group/' + groupName)
+		fetch('/group/users/?id={{group.id}}&name={{group.name}}&admin={{group.administrator}}')
         .then(response => response.json())
         .then(data => {
+
             const users = data[0];
             const isAdmin = data[1];
-
+           	userList = data[0];
             users.forEach(user => {
-                addUsersToSelector(user, assignedToContainer, selectedAssignedToValues, inputAssignedTo); // Добавляем пользователей в селектор
-                addUsersToSelector(user, createdByContainer, selectedCreatedBy, inputCreatedBy);
+                addUsersToSelector(user, selectBoxAssignedTo, selectedAssignedToValues); // Добавляем пользователей в селектор
+                addUsersToSelector(user, selectBoxCreatedBy, selectedCreatedBy);
+                addUsersToSelector(user, selectBoxCreateTask, selectedCreateTask);
                 addElementsToModal(user, isAdmin); // Добавляем пользователей в модальное окно
             });
         });
 
 
         
+</script>
+
+<!-- script for modal update -->
+<script>
+    function openModalUpdate(id, title, description, assigned, date, created){
+        var modal = document.getElementById("modalUpdateTask");
+        modal.style.display = "flex";
+        
+        var span = modal.children[0].children[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        var form = modal.getElementsByTagName('form');
+        var inputs = modal.getElementsByTagName('input');
+		var textarea = modal.getElementsByTagName('textarea');
+		textarea[0].value = description;
+        inputs[0].value = title;
+        inputs[1].value = assigned.join(', ');
+        inputs[2].value = date;
+		var selectedList = assigned.slice();
+		userList.forEach( user => {
+			addUsersToSelector(user, selectBoxUpdate, selectedList);
+		})
+		selectedList.forEach( user => {
+			var elem = modal.querySelector('[data-value="' + user + '"]');
+			elem.style.background = '#ddd';
+		})
+
+		var button = modal.getElementsByTagName("button")[0]
+		button.addEventListener("click", function(event){
+			event.preventDefault()
+			var ntitle = inputs[0].value
+			var ndescription = textarea[0].value
+			var nassigned = selectedList	
+			var ndate = inputs[2].value
+			var res = {
+				id: id,
+				title: ntitle,
+				description: ndescription,
+				assigned: nassigned,
+				date: ndate
+			}
+			var res = encodeURIComponent(JSON.stringify(res))
+			fetch('/task/update/?data='+res)
+				.then(res => {
+					console.log(res.url)
+					window.location.href = res.url
+				} )
+		})
+
+    }
 </script>
 
 <!-- filter script -->
@@ -240,27 +417,106 @@
     });
     }
     selectorSetting(selectBoxAssignedTo);
+    selectorSetting(selectBoxCreateTask);
     selectorSetting(selectBoxCreatedBy);
-
+	selectorSetting(selectBoxUpdate);
 </script>
 
 
 <!-- modal script -->
 <script>
-    // Открываем модальное окно при нажатии на кнопку
-    openModalBtn.onclick = function() {
-        modal.style.display = "flex";
-        }
+    var modalUsers = document.getElementById("modalUsers");
+    var openModalBtnUser = document.getElementById("openModalUser");
+    var spanUser = modalUsers.getElementsByClassName("close")[0];
+    
+    var modalTasks = document.getElementById("modalTasks");
+    var openModalBtnTasks = document.getElementById("openModalTasks");
+    var spanTasks = modalTasks.getElementsByClassName("close")[0];
 
-    // Закрываем модальное окно при нажатии на крестик
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
+    function settingModal(modal, openModalBtn, span){
+        // Открываем модальное окно при нажатии на кнопку
+        openModalBtn.onclick = function() {
+            modal.style.display = "flex";
+            }
 
-    // Закрываем окно, если кликнуть за его пределами
-    window.onclick = function(event) {
-        if (event.target == modal) {
+        // Закрываем модальное окно при нажатии на крестик
+        span.onclick = function() {
             modal.style.display = "none";
         }
+
+        // Закрываем окно, если кликнуть за его пределами
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     }
+    settingModal(modalTasks, openModalBtnTasks, spanTasks);
+    settingModal(modalUsers, openModalBtnUser, spanUser);
+</script>
+
+<!-- tasks add -->
+<script>
+    var tasksCont = document.getElementsByClassName('tasks')[0]
+    fetch('http://127.0.0.1:5000/task/{{group.id}}')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(task =>{
+            var elem =document.createElement('div')
+            elem.classList.add('task-card')
+            var title = document.createElement('h2')
+            title.innerHTML = task.title
+						var des = document.createElement('p')
+						des.innerHTML = 'Description ' + task.title + ': ' + task.description
+
+						var taskInfo = document.createElement('div')
+						taskInfo.classList.add('task-info')
+						var asTo = document.createElement('span')
+						asTo.innerHTML = 'Assigned to: ' + task.assigned.join(', ')
+						var crBy = document.createElement('span')
+						crBy.innerHTML = 'Created by: ' + task.created
+						var comp = document.createElement('span')
+						comp.innerHTML = 'Complete before: ' + task.date
+
+
+						taskInfo.appendChild(asTo)
+						asTo.insertAdjacentText('afterend',' | ')
+						taskInfo.appendChild(crBy)
+						crBy.insertAdjacentText('afterend',' | ')
+						taskInfo.appendChild(comp)
+
+
+            elem.appendChild(title)
+						elem.appendChild(des )
+						elem.appendChild(taskInfo)
+						
+						tasksCont.appendChild(elem)
+
+						var com = document.createElement('a')
+						com.classList.add('complete-button')
+						com.innerHTML = 'Complete'
+						com.type = 'button'
+						com.href = '/task/complete/' + task.id + '/' + {{group.id}}
+						elem.appendChild(com)
+
+						{% if isAdmin %}	
+						var del = document.createElement('a')
+						del.classList.add('delete-task')
+						del.innerHTML = 'Delete'
+						del.type = 'button'
+						del.href = '/task/delete/' + task.id + '/' + {{group.id}}
+						elem.appendChild(del)
+						
+						var upd = document.createElement('a')
+						upd.classList.add('update-task')
+						upd.innerHTML = 'Update'
+						upd.type = 'button'
+						upd.addEventListener('click', ()=>{
+						openModalUpdate(task.id, task.title, task.description, task.assigned, task.date)
+					})
+						elem.appendChild(upd)
+
+						{% endif %}
+        })
+    })
 </script>

@@ -92,6 +92,10 @@ body {
     display: inline-block; /* Убедитесь, что элемент ведет себя как блочный */
 }
 
+.task-card a {
+	margin-right: 10px;
+}
+
 .complete-button:hover {
     background-color: #218838;
 }
@@ -194,3 +198,17 @@ body {
     margin-top: 15px; /* Отступ сверху */
     display: inline-block; /* Убедитесь, что элемент ведет себя как блочный */
 }
+
+.update-task{
+    background-color: #357ae8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Убирает подчеркивание */
+    margin-top: 15px; /* Отступ сверху */
+    display: inline-block; /* Убедитесь, что элемент ведет себя как блочный */
+}
+

@@ -1,15 +1,10 @@
 .select-box {
     position: relative;
     display: inline-block;
-    width: 200px;
+    align-items: center;
+    width: 100%;
 }
 
-.select-box inputAssignedTo {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    cursor: pointer;
-}
 
 .options-container {
     display: none;
@@ -28,6 +23,8 @@
     padding: 10px;
     cursor: pointer;
 }
+
+
 
 .options-container div:hover {
     background-color: #ddd;

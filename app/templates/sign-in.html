@@ -9,7 +9,7 @@
 
 <body>
     <div class="container">
-        <form class="login-form" method="post" action="{{url_for('main.validateSignIn')}}">
+        <form class="login-form" method="post" action="signin/validate">
             <h1>Sign in</h1>
             <div class="input-group">
                 <label for="username">Username</label>
@@ -25,7 +25,7 @@
             <button type="submit" class="submit-button">Sign in</button>
             <div class="alternative">
                 <p>Don't have an account?</p>
-                <a href="{{url_for('main.signup')}}">Create an account</a>
+                <a href="/signup">Create an account</a>
                 <!-- TODO Добавить гугл линк -->
                 <p><a href="/auth/google" class="google-link">Sign with Google</a></p>
             </div>

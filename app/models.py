@@ -2,14 +2,16 @@ from dataclasses import dataclass
 
 @dataclass
 class Task:
+    id: int
     title: str
     description: str
-    assigned: str
+    assigned: list
     created: str
     status: str
     date: str
 
 @dataclass
 class Group:
-    title: str
-    administrator: str | list
+    id: int
+    name: str
+    administrator: str 
