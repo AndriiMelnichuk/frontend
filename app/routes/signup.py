@@ -1,11 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
+from flask import Blueprint, render_template, request, redirect
 
-from app.utils import Validator, InternetTalker
-from app.models import Group
+from app.utils import Validator 
 
 signup = Blueprint('signup', __name__)
 
-@signup.route('/signup')
+@signup.route('/')
 def signupRoute():
     return render_template('sign-up.html')
 

@@ -14,4 +14,3 @@ class Task:
 class Group:
     id: int
     name: str
-    administrator: str 

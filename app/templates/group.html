@@ -97,7 +97,7 @@
         {%include 'sidebar.html'%}
     <!-- Head container -->
     <div class="head-container">
-        <h1 class="group-name">{{group.name}}</h1> 
+        <h1 class="group-name">{{group_name}}</h1> 
          
         <div class="button-container"> 
             <a type="button" class="manage-users" id="openModalTasks">
@@ -110,7 +110,7 @@
                     Users
                 {% endif %}
             </a>
-            <a type="button" href="/group/delete/{{group.id}}" class="delete-group">
+            <a type="button" href="/group/delete/{{group_id}}" class="delete-group">
                 {% if isAdmin %} 
                     Delete group
                 {% else %}
@@ -123,7 +123,7 @@
     <!-- Основной контент -->
     <div class="content" id="content">
         <!-- Поиск задания -->
-				<form action="/task/search/{{group.id}}" method="get">
+				<form action="/task/search/{{group_id}}" method="get">
             <div class="search-container">
                 <div class="search-box">
                     <input type="text" name="query" placeholder="Search..."> <!-- Добавлен атрибут name -->
@@ -178,7 +178,7 @@
     <div id="modalTasks" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form class="My-form" action="/task/create/{{group.id}}">
+            <form class="My-form" action="/task/create/{{group_id}}">
                 <h1>Create task</h1>
                 
                     <label for="title">Title:</label>
@@ -209,10 +209,10 @@
                     <h1>Create task</h1>
                     
                     <label for="title">Title:</label>
-                    <input type="text" id="title" class="modal-input-text" placeholder="Title...">    
+                    <input type="text" id="title" name="title" class="modal-input-text" placeholder="Title...">    
                 
                     <label>Description:</label>
-                    <textarea placeholder="Description..."></textarea>
+                    <textarea name="description" placeholder="Description..."></textarea>
                 
                     <label>Assign to:</label>
                     <div class="select-box" id="update-task-select-box">
@@ -242,7 +242,7 @@
     const selectBoxCreatedBy = document.getElementById('created-by-select-box');
     const selectBoxCreateTask = document.getElementById('create-task-select-box');
 	const selectBoxUpdate = document.getElementById('update-task-select-box');
-    var groupName = "{{groupName}}";
+    var groupName = "{{group_name}}";
 
     
     let selectedAssignedToValues = [];
@@ -283,32 +283,29 @@
         });
     }
     // Добавляем пользователей в модальное окно
-    function addElementsToModal(user, isAdmin){
+    function addElementsToModal(user){
                     var userDiv = document.createElement('div');
                     userDiv.classList.add('user-item');
                     var u = document.createElement('p')
                     u.textContent = user
                     userDiv.appendChild(u)
                     
-                    if (isAdmin){
+                    {% if isAdmin %}
                         var deleteButton = document.createElement('a');
                         deleteButton.classList.add('delete-user')
                         deleteButton.textContent = 'Delete';
-											deleteButton.href ='/group/delete/{{group.id}}';
+											deleteButton.href ='/group/delete/{{group_id}}/{{group_name}}/'+user;
                         deleteButton.classList.add('delete-button');
                         userDiv.appendChild(deleteButton)
-                    }
+                    {% endif %} 
 
                     modalDataUser.appendChild(userDiv)
                 }
     // Выполняем AJAX-запрос для получения данных
-		fetch('/group/users/?id={{group.id}}&name={{group.name}}&admin={{group.administrator}}')
+		fetch('/group/users/?id={{group_id}}&name={{group_name}}')
         .then(response => response.json())
-        .then(data => {
+        .then(userList => {
 
-            const users = data[0];
-            const isAdmin = data[1];
-           	userList = data[0];
             users.forEach(user => {
                 addUsersToSelector(user, selectBoxAssignedTo, selectedAssignedToValues); // Добавляем пользователей в селектор
                 addUsersToSelector(user, selectBoxCreatedBy, selectedCreatedBy);
@@ -368,7 +365,7 @@
 				date: ndate
 			}
 			var res = encodeURIComponent(JSON.stringify(res))
-			fetch('/task/update/?data='+res)
+			fetch('/task/update/{{group_name}}?id={{group_id}}&data='+res)
 				.then(res => {
 					console.log(res.url)
 					window.location.href = res.url
@@ -458,7 +455,7 @@
 <!-- tasks add -->
 <script>
     var tasksCont = document.getElementsByClassName('tasks')[0]
-    fetch('http://127.0.0.1:5000/task/{{group.id}}')
+    fetch('http://127.0.0.1:5000/task/{{group_id}}')
     .then(response => response.json())
     .then(data => {
         data.forEach(task =>{
@@ -496,7 +493,7 @@
 						com.classList.add('complete-button')
 						com.innerHTML = 'Complete'
 						com.type = 'button'
-						com.href = '/task/complete/' + task.id + '/' + {{group.id}}
+						com.href = '/task/complete/{{group_name}}' + task.id + '/' + {{group_id}}
 						elem.appendChild(com)
 
 						{% if isAdmin %}	
@@ -504,7 +501,7 @@
 						del.classList.add('delete-task')
 						del.innerHTML = 'Delete'
 						del.type = 'button'
-						del.href = '/task/delete/' + task.id + '/' + {{group.id}}
+						del.href = '/task/delete/{{group_name}}/' + task.id + '/' + {{group_id}}
 						elem.appendChild(del)
 						
 						var upd = document.createElement('a')

@@ -6,9 +6,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in-up.css') }}">
     <title>ToDoFam</title>
 </head>
+
+<style>
+    input{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+</style>
+
 <body>
     <div class="container">
-        <form class="registration-form" id="registrationForm" method="post" action="{{url_for('main.validateSignUp')}}">
+        <form class="registration-form" id="registrationForm" method="post" action="/signup/validate">
             <h2>Sign up</h2>
             <div class="form-group">
                 <label for="username">Username</label>

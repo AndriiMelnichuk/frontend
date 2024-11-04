@@ -9,7 +9,7 @@ task = Blueprint('task', __name__)
 @task.route('/<groupId>')
 def getTasks(groupId):
     tasks = InternetTalker.getTasksFromGroup(groupId)
-    
+    # TODO modify feature 
     return jsonify([{'id': t.id,
                      'title': t.title,
                      'description': t.description,
@@ -18,36 +18,36 @@ def getTasks(groupId):
                      'status': t.status,
                      'data': t.date} for t in tasks])
 
-@task.route('/update/')
-def updateTask():
+
+@task.route('/update/<group_name>')
+def updateTask(group_name):
     id = request.args.get('id')
     data = request.args.get('data')
-    group = Group(id, 'name', 'administrator')
-    InternetTalker.completeTask(task, group)
-    return redirect(f'/group/{group.name}?id={group.id}&admin={group.administrator}')
+    # TODO Настроить обработку данных и их отпраку
+    InternetTalker.completeTask(task, id)
+    return redirect(f'/group/{group_name}?id={id}')
 
-@task.route('/complete/<taskId>/<groupId>')
-def completeTask(taskId, groupId):
-    InternetTalker.completeTask(task, groupId)
-    group = InternetTalker.getGroupById(groupId)
-    return redirect(f'/group/{group.name}?id={group.id}&admin={group.administrator}')
 
-@task.route('/delete/<taskId>/<groupId>')
-def deleteTask(taskId, groupId):
-    group = InternetTalker.getGroupById(groupId)
-    InternetTalker.deleteTask(task, group)
-    return redirect(f'/group/{group.name}?id={group.id}&admin={group.administrator}')
+@task.route('/complete/<groupName>/<taskId>/<groupId>')
+def completeTask(grouName, taskId, groupId):
+    InternetTalker.completeTask(taskId, groupId)
+    return redirect(f'/group/{grouName}/?id={groupId}')
+
+
+@task.route('/delete/<groupName>/<taskId>/<groupId>')
+def deleteTask(groupName, taskId, groupId):
+    InternetTalker.deleteTask(taskId, groupId)
+    return redirect(f'/group/{groupName}/?id={groupId}')
+
 
 @task.route('/search/<groupId>')
 def searchTasksInGroupRoute(groupId):
     # tasks = InternetTalker.searchTasksInGroup()
-    group = InternetTalker.getGroupById(groupId)
-    return redirect(f'/group/{group.name}?id={group.id}&admin={group.administrator}')
-    # return render_template("group.html", groupName=groupName, tasks=tasks, isAdmin=InternetTalker.isAdministrator(groupName))
+    # TODO: Нужно будет удалить этот роут. Во время запроса заданий будет проверятся поиск и фильтр
+    pass
 
-@task.route('/create/<groupId>')
-def createTaskRoute(groupId):
-    # TODO
-    group = InternetTalker.getGroupById(groupId)
-    return redirect(f'/group/{group.name}?id={group.id}&admin={group.administrator}')
+@task.route('/create/<groupName>/<groupId>')
+def createTaskRoute(groupName, groupId):
+    # TODO Добавить InternetTalker
+    return redirect(f'/group/{groupName}/?id={groupId}')
     

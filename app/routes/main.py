@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
+from flask import Blueprint, render_template
 
-from app.utils import Validator, InternetTalker
-from app.models import Group
+from app.utils import InternetTalker
 
 # TODO Добавить регистрацию через гугл
 main = Blueprint('main', __name__)
@@ -14,6 +13,3 @@ def index():
         return render_template('main.html')
     return render_template('sign-in-or-up.html')
 
-@main.route('/test')
-def test():
-    return render_template('sign-in-or-up.html')

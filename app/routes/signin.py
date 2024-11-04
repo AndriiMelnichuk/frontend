@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
+from flask import Blueprint, render_template, request, redirect
 
-from app.utils import Validator, InternetTalker
-from app.models import Group
+from app.utils import Validator
 
 signin = Blueprint('signin', __name__)
 

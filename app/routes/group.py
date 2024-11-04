@@ -10,9 +10,8 @@ group = Blueprint('group', __name__)
 @group.route('/<name>')
 def selectGroup(name):
     id = request.args.get('id')
-    admin = request.args.get('admin')
-    group = Group(id, name, admin)
-    return render_template("group.html", group=group, isAdmin=InternetTalker.isAdministrator(group))
+    isAdmin= InternetTalker.isAdministrator(group)
+    return render_template("group.html", group_name=name, group_id=id, isAdmin=isAdmin)
 
 
 @group.route('/delete/<groupId>')
@@ -23,15 +22,11 @@ def deleteGroupRoute(groupId):
 @group.route('/users/')
 def userAtGroupRoute():
     id = request.args.get('id')
-    name = request.args.get('name')
-    admin = request.args.get('admin')
-    group = Group(id, name, admin)
-    users = InternetTalker.getUsersAtGroup(group)
-    isAdmin = InternetTalker.isAdministrator(group)
-    return jsonify(users, isAdmin)
+    users = InternetTalker.getUsersAtGroup(id)
+    return users 
 
 
-@group.route('/delete/<group>/<username>')
-def deleteUserFromGroupRoute(group, username):
-    InternetTalker.deleteUserFromGroup(group, username)
-    return redirect(url_for('group.selectGroup', group=group))
+@group.route('/delete/<group_id>/<group_name>/<username>')
+def deleteUserFromGroupRoute(group_id, group_name, username):
+    InternetTalker.deleteUserFromGroup(group_id, username)
+    return redirect(f'/group/{group_name}/?id={group_id}')
