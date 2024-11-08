@@ -7,6 +7,7 @@ def updateSession(username, token):
         session['username'] = username
 
 url = 'http://localhost:5001/'
+urlSearch = 'http://localhost:5010/'
 class InternetTalker:
     """
         Class for work with other services
@@ -37,6 +38,23 @@ class InternetTalker:
         res = []
         for i in range(len(resp_data['group_id'])):
             res.append(Group(resp_data['group_id'][i], resp_data['group_name'][i]))
+        # res = [
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(1, 'group'),
+        #     Group(2, 'asdf'),
+        #     Group(3, 'hello')
+        # ]
         return res
 
 
@@ -110,7 +128,7 @@ class InternetTalker:
             Task(task_id[i], task_name[i], description[i], members[i], '...', todo_task[i], deadline[i])
         for i in range(len(task_id))]
 
-        # return [
+        # tasks =  [
         #     Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'cr 1', 'st 1', '2024-12-02'),
         #     Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', 'st 1', '2024-02-02'),
         #     Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
@@ -120,7 +138,7 @@ class InternetTalker:
         #     Task(7, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
         #     Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11', 'st 91', '2024-02-02')
         # ]
-    
+        return tasks 
 
     @staticmethod
     def completeTask(task_id, group_id):
@@ -193,6 +211,7 @@ class InternetTalker:
         )
         resp_data = resp.json()
         # TODO Could be problems
+        # resp_data = True
         return resp_data
     
     @staticmethod 
@@ -255,6 +274,29 @@ class InternetTalker:
             headers=head,
             json=data
         )
+
+    @staticmethod
+    def getGroupsBySearch(text):
+        head = {'Content-Type': 'application/json'}
+        data = {
+            'text': text,
+            'jwt': session['jwt']
+        }
+        resp = req.post(
+            url=url + '/group',
+            headers=head,
+            json=data
+        )
+        l = len(resp['id'])
+        id = resp['id']
+        name = resp['name']
+        res = [
+            Group(
+                id[i],
+                name[i]
+            )
+        for i in range(len(l))]
+        return res 
 
 
 class Validator:

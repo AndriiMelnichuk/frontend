@@ -6,19 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDoFam</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/head-container.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 </head>
 
 <body>
-    <!-- Основной контент -->
+    <!-- Head container -->
+    <div class="head-container" >
+        <h1 class="group-name">Your groups</h1> 
+        <div class="button-container">
+        <a type="button" class="create-group" id="openModal">Create group</a>
+        </div>
 
+    </div>
+
+    <!-- Main container -->
     <div class="content" id="content">
-        <h1>Your groups</h1>
+        <!-- search group -->
+        <form action="/group/search/" method="get">
+            <div class="search-container" style="bottom: 20px;">
+                <div class="search-box">
+                    <input type="text" name="group_name" placeholder="Search...">
+                    <button type="submit">Search</button> 
+                </div>
+            </div>
+        </form>
         <div class="group-container"  id="group-container">
-            <a type="button" class="create-group" id="openModal">Create group</a>
-            <!-- {% for group in groups %}
-                
-                <a type="button" class="group-element" href="">{{group.name}}</a>
-            {% endfor %} -->
         </div>
     </div>
      
