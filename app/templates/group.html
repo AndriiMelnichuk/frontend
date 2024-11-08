@@ -170,6 +170,12 @@
                 <h1>
                     Users
                 </h1>
+                {% if isAdmin %}
+                <form action="/group/addUser/{{group_id}}/{{group_name}}">
+                    <input type="text" name="user" placeholder="New user"/>
+                    <input type="submit">
+                </form>
+                {% endif %}
             </div> 
         </div>
     </div>

@@ -239,6 +239,22 @@ class InternetTalker:
             headers=head,
             json=data
         )
+    
+
+    @staticmethod
+    def addUserToGroup(group_id, name):
+        head = {'Content-Type': 'application/json'}
+        data = {
+            'type': 'add_member_to_group',
+            'group_id': group_id,
+            'member': name,
+            'jwt': session['jwt']
+        }
+        resp = req.post(
+            url=url,
+            headers=head,
+            json=data
+        )
 
 
 class Validator:
@@ -272,6 +288,10 @@ class Validator:
         if error_ans == '':
             error_ans += InternetTalker.isSignInCorrect(username, password)
         return error_ans
+    
+
+
+
         
 
 def decode_group(group_str):

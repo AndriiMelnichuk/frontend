@@ -26,6 +26,14 @@ def userAtGroupRoute():
     return users 
 
 
+@group.route('/addUser/<group_id>/<group_name>')
+def addUserRoute(group_id, group_name):
+    name = request.args.get('user')
+    InternetTalker.addUserToGroup(group_id, name)
+    return redirect(f'/group/{group_name}/?id={group_id}')
+
+
+
 @group.route('/delete/<group_id>/<group_name>/<username>')
 def deleteUserFromGroupRoute(group_id, group_name, username):
     InternetTalker.deleteUserFromGroup(group_id, username)
