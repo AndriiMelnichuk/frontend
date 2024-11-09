@@ -90,6 +90,43 @@
     .My-form .select-box  div{
         width: 100%+20px;
     }
+
+    .add-user-div{
+        display: flex;                /* Используем Flexbox */
+        align-items: center;          /* Выравниваем элементы по центру по вертикали */
+        gap: 10px;                    /* Отступ между элементами */
+        padding: 10px;                /* Внутренние отступы для общего стиля */
+        background-color: #f5f5f5;    /* Светлый фон */
+        border-radius: 8px;           /* Скругленные углы */
+        max-width: 400px;             /* Ограничение ширины контейнера */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для визуального эффекта */
+    }
+
+    /* Стили для первого input внутри контейнера */
+    .add-user-div input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    /* Стили для первой кнопки внутри контейнера */
+    .add-user-div button {
+        padding: 8px 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .add-user-div button:hover {
+        background-color: #45a049;
+    }
+
 </style>
 
 <body>
@@ -172,8 +209,10 @@
                 </h1>
                 {% if isAdmin %}
                 <form action="/group/addUser/{{group_id}}/{{group_name}}">
-                    <input type="text" name="user" placeholder="New user"/>
-                    <input type="submit">
+                    <div class="add-user-div">
+                        <input type="text" name="user" placeholder="New user"/>
+                        <button type="submit">Add user</button>
+                    </div>
                 </form>
                 {% endif %}
             </div> 
@@ -311,12 +350,11 @@
 		fetch('/group/users/?id={{group_id}}&name={{group_name}}')
         .then(response => response.json())
         .then(userList => {
-
-            users.forEach(user => {
+            userList.forEach(user => {
                 addUsersToSelector(user, selectBoxAssignedTo, selectedAssignedToValues); // Добавляем пользователей в селектор
                 addUsersToSelector(user, selectBoxCreatedBy, selectedCreatedBy);
                 addUsersToSelector(user, selectBoxCreateTask, selectedCreateTask);
-                addElementsToModal(user, isAdmin); // Добавляем пользователей в модальное окно
+                addElementsToModal(user); // Добавляем пользователей в модальное окно
             });
         });
 
