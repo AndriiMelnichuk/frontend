@@ -39,7 +39,3 @@ def deleteUserFromGroupRoute(group_id, group_name, username):
     return redirect(f'/group/{group_name}/?id={group_id}')
 
 
-@group.route('/search')
-def searchGroupRoute():
-    group_name = request.args.get('group_name')
-    InternetTalker.getGroupsBySearch(group_name)

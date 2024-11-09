@@ -11,26 +11,23 @@
 </head>
 
 <body>
-    <!-- Head container -->
-    <div class="head-container" >
-        <h1 class="group-name">Your groups</h1> 
-        <div class="button-container">
-        <a type="button" class="create-group" id="openModal">Create group</a>
-        </div>
-
-    </div>
 
     <!-- Main container -->
     <div class="content" id="content">
-        <!-- search group -->
-        <form action="/group/search/" method="get">
-            <div class="search-container" style="bottom: 20px;">
-                <div class="search-box">
-                    <input type="text" name="group_name" placeholder="Search...">
-                    <button type="submit">Search</button> 
-                </div>
+        <!-- Head container -->
+        <div class="head-container" >
+            <h1 class="group-name">Your groups</h1> 
+            <div class="button-container">
+                <a type="button" class="create-group" id="openModal">Create group</a>
             </div>
-        </form>
+        </div>
+        <!-- search group -->
+        <div class="search-container" style="bottom: 20px;">
+            <div class="search-box">
+                <input type="text" name="group_name" placeholder="Search...">
+                <button onclick="helper()">Search</button> 
+            </div>
+        </div>
         <div class="group-container"  id="group-container">
         </div>
     </div>
@@ -46,6 +43,9 @@
 
 <script>
     let cont = document.getElementById('group-container')
+    let searchButton = document.getElementsByClassName('search-box')[1]
+    let searchInput = document.getElementsByClassName('search-box')[0]
+
     fetch('/groups/elements')
         .then(r => r.json())
         .then(data =>
@@ -54,11 +54,29 @@
                 e.text = d.name
                 e.classList.add('group-element')
                 
-                e.href = '/group/'+encodeURIComponent(d.name)+'?id='+encodeURIComponent(d.id)+'&admin='+encodeURIComponent(d.admin)
+                e.href = '/group/'+encodeURIComponent(d.name)+'?id='+encodeURIComponent(d.id)
                 cont.appendChild(e)
             }
             )
         )
 
+                     
+    function helper() {
+        var text = searchInput.innerHTML
+        cont.innerHTML = ''
+        fetch('/groups/search/?group_name='+text)
+        .then(r => r.json())
+        .then(data => 
+            data.forEach(d => {
+                var e = document.createElement('a')
+                e.text = d.name
+                e.classList.add('group-element')
+                
+                e.href = '/group/'+encodeURIComponent(d.name)+'?id='+encodeURIComponent(d.id)
+                cont.appendChild(e)
+            })
+    )   
+    }  
+    
 </script>
 </html>

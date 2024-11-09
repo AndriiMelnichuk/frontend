@@ -175,20 +175,14 @@
                         <div class="options-container"></div>
                     </div>
 
-                    <label>Created by:</label>
-                    <div class="select-box" id="created-by-select-box">
-                        <input type="text" name="created_by" readonly placeholder="Created-by"> <!-- Добавлен атрибут name -->
-                        <div class="options-container"></div>
-                    </div>
-
                     <label>Complete before:</label>
                     <input type="date" id="due-date" name="complete_before" placeholder="Complete before" /> <!-- Добавлен атрибут name -->
         
                     <label for="status">Status:</label>
                     <select id="status" name="status"> <!-- Добавлен атрибут name -->
                         <option value="">None</option>
-                        <option value="complete">Completed</option>
-                        <option value="not complete">In process</option>
+                        <option value="false">Not in process</option>
+                        <option value="true">In process</option>
                     </select>
                 </div>
             </div>
@@ -284,14 +278,12 @@
     let userList = []
 
     const selectBoxAssignedTo = document.getElementById('assigned-to-select-box');
-    const selectBoxCreatedBy = document.getElementById('created-by-select-box');
     const selectBoxCreateTask = document.getElementById('create-task-select-box');
 	const selectBoxUpdate = document.getElementById('update-task-select-box');
     var groupName = "{{group_name}}";
 
     
     let selectedAssignedToValues = [];
-    let selectedCreatedBy = [];
     let selectedCreateTask =[]
 
 
@@ -349,10 +341,10 @@
     // Выполняем AJAX-запрос для получения данных
 		fetch('/group/users/?id={{group_id}}&name={{group_name}}')
         .then(response => response.json())
-        .then(userList => {
-            userList.forEach(user => {
+        .then(users => {
+            users.forEach(user => {
+                userList.push(user)
                 addUsersToSelector(user, selectBoxAssignedTo, selectedAssignedToValues); // Добавляем пользователей в селектор
-                addUsersToSelector(user, selectBoxCreatedBy, selectedCreatedBy);
                 addUsersToSelector(user, selectBoxCreateTask, selectedCreateTask);
                 addElementsToModal(user); // Добавляем пользователей в модальное окно
             });
@@ -364,7 +356,7 @@
 
 <!-- script for modal update -->
 <script>
-    function openModalUpdate(id, title, description, assigned, date, created){
+    function openModalUpdate(id, title, description, assigned, date){
         var modal = document.getElementById("modalUpdateTask");
         modal.style.display = "flex";
         
@@ -386,6 +378,7 @@
         inputs[1].value = assigned.join(', ');
         inputs[2].value = date;
 		var selectedList = assigned.slice();
+        console.log(userList)
 		userList.forEach( user => {
 			addUsersToSelector(user, selectBoxUpdate, selectedList);
 		})
@@ -459,7 +452,6 @@
     }
     selectorSetting(selectBoxAssignedTo);
     selectorSetting(selectBoxCreateTask);
-    selectorSetting(selectBoxCreatedBy);
 	selectorSetting(selectBoxUpdate);
 </script>
 
@@ -514,16 +506,12 @@
 						taskInfo.classList.add('task-info')
 						var asTo = document.createElement('span')
 						asTo.innerHTML = 'Assigned to: ' + task.assigned.join(', ')
-						var crBy = document.createElement('span')
-						crBy.innerHTML = 'Created by: ' + task.created
 						var comp = document.createElement('span')
 						comp.innerHTML = 'Complete before: ' + task.date
 
 
 						taskInfo.appendChild(asTo)
 						asTo.insertAdjacentText('afterend',' | ')
-						taskInfo.appendChild(crBy)
-						crBy.insertAdjacentText('afterend',' | ')
 						taskInfo.appendChild(comp)
 
 

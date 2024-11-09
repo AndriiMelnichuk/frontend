@@ -16,7 +16,7 @@ def getTasks(groupId):
                      'assigned': t.assigned,
                      'created': t.created,
                      'status': t.status,
-                     'data': t.date} for t in tasks])
+                     'date': t.date} for t in tasks])
 
 
 @task.route('/update/<group_name>')

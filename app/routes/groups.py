@@ -23,3 +23,12 @@ def elementsRoute():
         'id': g.id, 
         'name': g.name, 
     } for g in groups])
+
+@groups.route('/search/')
+def searchGroupRoute():
+    group_name = request.args.get('group_name')
+    groups = InternetTalker.getGroupsBySearch(group_name)
+    return jsonify([{
+        'id': g.id, 
+        'name': g.name, 
+    } for g in groups])
