@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
+    <script src="{{ url_for('static', filename='js/onClose.js') }}"></script>
+    <title>ToDoFam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .calendar {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .calendar-day {
+            padding: 20px;
+            background-color: #f0f0f0;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .calendar-day:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .has-tasks {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .no-tasks {
+            background-color: #f0f0f0;
+        }
+
+        .today {
+            background-color: #ffc107;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content span {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .task-info {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .task-info textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+            background-color: #f9f9f9;
+            pointer-events: none; /* Отключаем редактирование */
+        }
+
+        .btn-complete {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-complete:hover {
+            background-color: #218838;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        #month-year {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Новая кнопка для возврата на сегодняшний месяц */
+        #today-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+            transition: background-color 0.3s ease;
+        }
+
+        #today-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Стиль для иконки */
+        .today-icon {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="calendar">
+            <div class="calendar-header">
+                <button id="prev-month">❮</button>
+                <h2 id="month-year"></h2>
+                <button id="next-month">❯</button>
+            </div>
+            <div class="calendar-body" id="calendar-body">
+                <!-- Дни будут добавляться динамически -->
+            </div>
+        </div>
+
+        <!-- Кнопка для возврата на сегодняшний месяц -->
+        <button id="today-button">
+            <span class="today-icon">↻</span>
+        </button>
+
+        <!-- Модальное окно для информации о заданиях -->
+        <div id="task-info-modal" class="modal" onclick="closeTaskInfoModal(event)">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <span class="close-btn" onclick="closeTaskInfoModal()">×</span>
+                <h3>Задания на этот день</h3>
+                <div class="task-info" id="task-info">
+                    <!-- Информация о заданиях будет добавлена сюда -->
+                </div>
+            </div>
+        </div>
+    </div>
+     
+     {%include 'sidebar.html'%}
+
+    <script>
+        // Переменные для работы с календарем
+        const calendarBody = document.getElementById('calendar-body');
+        const monthYear = document.getElementById('month-year');
+        const taskInfoModal = document.getElementById('task-info-modal');
+        const taskInfoContainer = document.getElementById('task-info');
+        const todayButton = document.getElementById('today-button');
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Получение задач на день
+        function getTasksForDay(dateString) {
+            return fetch(`/tasks/${dateString}`)
+                .then(response => response.json());
+        }
+
+        // Отображение календаря
+        function displayCalendar(month, year) {
+            calendarBody.innerHTML = '';
+            const firstDay = new Date(year, month).getDay();
+            const daysInMonth = 32 - new Date(year, month, 32).getDate();
+            monthYear.innerText = `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendarBody.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.classList.add('calendar-day');
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                // Выделение сегодняшнего дня
+                const currentDate = new Date();
+                if (currentDate.getDate() === day && currentDate.getMonth() === month && currentDate.getFullYear() === year) {
+                    dayCell.classList.add('today');
+                }
+
+                // Проверка наличия заданий
+                getTasksForDay(dateString).then(tasks => {
+                    if (tasks.length > 0) {
+                        dayCell.classList.add('has-tasks');
+                    } else {
+                        dayCell.classList.add('no-tasks');
+                    }
+                });
+
+                dayCell.innerHTML = `<span>${day}</span>`;
+                dayCell.onclick = () => openTaskInfoModal(day, month, year);
+                calendarBody.appendChild(dayCell);
+            }
+
+            // Показ кнопки для возвращения на сегодняшний месяц
+            todayButton.style.display = currentMonth !== new Date().getMonth() || currentYear !== new Date().getFullYear() ? 'inline-block' : 'none';
+        }
+
+        // Открытие модального окна с информацией о заданиях
+        function openTaskInfoModal(day, month, year) {
+            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            
+            getTasksForDay(dateString).then(tasks => {
+                if (tasks.length === 0) {
+                    taskInfoContainer.innerHTML = `<p>Нет заданий на этот день.</p>`;
+                } else {
+                    taskInfoContainer.innerHTML = '';
+                    tasks.forEach(task => {
+                        taskInfoContainer.innerHTML += `
+                            <div>
+                                <strong>${task.title}</strong>
+                                <div>${task.details}</div>
+                                <textarea placeholder="Комментарии..." readonly>${task.comment || ''}</textarea>
+                                <button class="btn-complete">Выполнено</button>
+                            </div>
+                        `;
+                    });
+                }
+                taskInfoModal.style.display = 'flex';
+            });
+        }
+
+        // Закрытие модального окна
+        function closeTaskInfoModal() {
+            taskInfoModal.style.display = 'none';
+        }
+
+        // Обработчик кнопки для возврата на текущий месяц
+        todayButton.onclick = () => {
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            displayCalendar(currentMonth, currentYear);
+        };
+
+        // Обработчик кнопок для переключения месяца
+        document.getElementById('prev-month').onclick = () => {
+            if (currentMonth === 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else {
+                currentMonth--;
+            }
+            displayCalendar(currentMonth, currentYear);
+        };
+
+        document.getElementById('next-month').onclick = () => {
+            if (currentMonth === 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else {
+                currentMonth++;
+            }
+            displayCalendar(currentMonth, currentYear);
+        };
+
+        // Инициализация
+        displayCalendar(currentMonth, currentYear);
+    </script>
+</body>
+
+</html>

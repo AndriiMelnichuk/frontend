@@ -16,19 +16,22 @@
 </script>
 <div class="sidebar" id="sidebar">
     <div class="sidebar-tile" onclick="toggleSidebar()">
-        <img src="{{ url_for('static', filename='img/hamburger-icon.png') }}" alt="Иконка меню">
+        <img src="{{ url_for('static', filename='img/hamburger-icon.png') }}">
         <span><p href="page1.html">Menu</p></span>
     </div>
 
     <div class="sidebar-tile" onclick="location.href='/';">
-        <img src="{{ url_for('static', filename='img/home-icon.png') }}" alt="Главная">
+        <img src="{{ url_for('static', filename='img/home-icon.png') }}">
         <span><p>Home</p></span>
     </div>
 
-
-
     <div class="sidebar-tile" onclick="location.href='/groups';">
-        <img src="{{ url_for('static', filename='img/group-icon.png') }}" alt="Группы">
+        <img src="{{ url_for('static', filename='img/group-icon.png') }}">
         <span><p>Groups</p></span>
+    </div>
+
+    <div class="sidebar-tile" onclick="location.href='/calendar';">
+        <img src="{{ url_for('static', filename='img/calendar.png') }}">
+        <span><p>Calendar</p></span>
     </div>
 </div>

@@ -14,7 +14,6 @@ def getTasks(groupId):
                      'title': t.title,
                      'description': t.description,
                      'assigned': t.assigned,
-                     'created': t.created,
                      'status': t.status,
                      'date': t.date} for t in tasks])
 
@@ -48,6 +47,12 @@ def searchTasksInGroupRoute(groupId):
 
 @task.route('/create/<groupName>/<groupId>')
 def createTaskRoute(groupName, groupId):
-    # TODO Добавить InternetTalker
+    
+    task_name = request.args.get('task_name')
+    description = request.args.get('description')
+    deadline = request.args.get('deadline')
+    todo_task = request.args.get('todo_task')
+    members = request.args.get('members')
+    InternetTalker.add_task(groupId,task_name, description, deadline, todo_task, members)
     return redirect(f'/group/{groupName}/?id={groupId}')
     

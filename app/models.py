@@ -6,7 +6,6 @@ class Task:
     title: str
     description: str
     assigned: list
-    created: str
     status: str
     date: str
 

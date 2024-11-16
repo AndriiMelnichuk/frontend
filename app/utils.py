@@ -19,7 +19,8 @@ class InternetTalker:
 
     @staticmethod
     def isAccesToken():
-        return session.get('jwt', None) != None
+        a = session.get('jwt', None)
+        return a != None
 
 
     @staticmethod
@@ -37,24 +38,10 @@ class InternetTalker:
         resp_data = resp.json()
         res = []
         for i in range(len(resp_data['group_id'])):
-            res.append(Group(resp_data['group_id'][i], resp_data['group_name'][i]))
+            res.append(Group(resp_data['group_id'][i], resp_data['group'][i]))
         # res = [
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(1, 'group'),
-        #     Group(2, 'asdf'),
-        #     Group(3, 'hello')
-        # ]
+        #     Group(i, f'Group {i}')
+        # for i in range(10)]
         return res
 
 
@@ -125,17 +112,17 @@ class InternetTalker:
         todo_task = resp_data['todo_task']
         # TODO Task created
         tasks = [
-            Task(task_id[i], task_name[i], description[i], members[i], '...', todo_task[i], deadline[i])
+            Task(task_id[i], task_name[i], description[i], members[i], todo_task[i], deadline[i])
         for i in range(len(task_id))]
 
         # tasks =  [
-        #     Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'cr 1', 'st 1', '2024-12-02'),
-        #     Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', 'st 1', '2024-02-02'),
-        #     Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
-        #     Task(4, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
-        #     Task(5, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
-        #     Task(6, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
-        #     Task(7, 'title 2', 'des 2', ['user 1'], 'cr 2', 'st 1', '2024-02-02'),
+        #     Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
+        #     Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+        #     Task(4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+        #     Task(5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+        #     Task(6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+        #     Task(7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
         #     Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11', 'st 91', '2024-02-02')
         # ]
         return tasks 
@@ -184,7 +171,7 @@ class InternetTalker:
         head = {'Content-Type': 'application/json'}
         data = {
             'type': 'add_group',
-            'group_id': groupName,
+            'group': groupName,
             'jwt': session['jwt']
         }
         resp = req.post(
@@ -193,25 +180,25 @@ class InternetTalker:
             json=data
         )
         resp_data = resp.json()
-        return resp_data['groupd_id']
+        return resp_data['group_id']
  
 
     @staticmethod
     def isAdministrator(groupName):
-        head = {'Content-Type': 'application/json'}
-        data = {
-            'type': 'is_admin',
-            'group_id': groupName,
-            'jwt': session['jwt']
-        }
-        resp = req.post(
-            url=url,
-            headers=head,
-            json=data
-        )
-        resp_data = resp.json()
+        # head = {'Content-Type': 'application/json'}
+        # data = {
+        #     'type': 'is_admin',
+        #     'group_id': groupName,
+        #     'jwt': session['jwt']
+        # }
+        # resp = req.post(
+        #     url=url,
+        #     headers=head,
+        #     json=data
+        # )
+        # resp_data = resp.json()
         # TODO Could be problems
-        # resp_data = True
+        resp_data = True
         return resp_data
     
     @staticmethod 
@@ -242,7 +229,9 @@ class InternetTalker:
             headers=head,
             json=data
         )
-        return resp.json()['users']
+        res = resp.json()['users']
+        # res = [f'user {i}' for i in range(15)]
+        return res
 
     @staticmethod
     def deleteUserFromGroup(group_id, username):
@@ -296,7 +285,44 @@ class InternetTalker:
                 name[i]
             )
         for i in range(len(l))]
+        # res = [Group(i, f'Group: {i}') for i in range(3)]
         return res 
+
+
+    @staticmethod
+    def getAllAssignedTask():
+        # TODO add connection to real service
+        tasks =  [
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
+            Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+            Task(4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+            Task(5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+            Task(6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+            Task(7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+            Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11', 'st 91', '2024-02-02')
+        ]
+        return tasks
+    
+    @staticmethod
+    def add_task(group_id, task_name, description, deadline, todo_task, members):
+        head = {'Content-Type': 'application/json'}
+        data = {
+            'type': 'add_task',
+            "group_id": group_id,
+            "task_name": task_name,
+            "description": description,
+            "deadline": deadline,
+            "todo_task": todo_task,
+            "members": members,
+            'group_id': group_id,
+            'jwt': session['jwt']
+        }
+        resp = req.post(
+            url=url,
+            headers=head,
+            json=data
+        )
 
 
 class Validator:

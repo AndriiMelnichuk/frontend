@@ -217,25 +217,31 @@
     <div id="modalTasks" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form class="My-form" action="/task/create/{{group_id}}">
+            <form class="My-form" >
                 <h1>Create task</h1>
                 
                     <label for="title">Title:</label>
-                    <input type="text" id="title" class="modal-input-text" placeholder="Title...">    
+                    <input type="text" id="title" name="task_name" class="modal-input-text" placeholder="Title...">    
                 
                     <label>Description:</label>
-                    <textarea placeholder="Description..."></textarea>
+                    <textarea name="description" placeholder="Description..."></textarea>
                 
                     <label>Assign to:</label>
                     <div class="select-box" id="create-task-select-box">
                         <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to"> <!-- Добавлен атрибут name -->
                         <div class="options-container"></div>
                     </div>
+
+                    <label>Task status</label>
+                    <select id="mySelector" class="modal-input-text">
+                        <option value="true">Waiting</option>
+                        <option value="false">In process</option>
+                    </select>
                 
                     <label>Complete before:</label>
                     <input type="date">
                 
-                <button class="submit-button">Create</button>
+                <button onclick="taskCreate()" class="submit-button">Create</button>
             </form>
         </div>
     </div>
@@ -272,6 +278,30 @@
 
 </html>
 
+<script>
+    function taskCreate(){
+        var modal = document.getElementById('modalTasks')
+        var inputs = modal.getElementsByTagName('input')
+        var task_name = inputs[0].value
+        var description = modal.getElementsByTagName('textarea')[0].value
+        var deadline = inputs[2].value
+        var todo_task = modal.getElementsByTagName('selector')[0].value == "true"
+        console.log(modal.getElementsByTagName('selector')[0].value)
+        var members = selectedCreateTask
+        fetch('/task/create/{{group_name}}/{{group_id}}?task_name={task_name}&description={description}&deadline={deadline}&todo_task={todo_task}&members={members}')
+        .then(response => {
+            if (response.ok){
+                return response.json()
+            }
+            else {
+                throw new Error('oшибка создания таски')
+            }})
+        .then(data => {
+            location.reload()
+        })
+
+    }
+</script>
 
 <!-- main script -->
 <script>
