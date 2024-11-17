@@ -51,8 +51,13 @@ def createTaskRoute(groupName, groupId):
     task_name = request.args.get('task_name')
     description = request.args.get('description')
     deadline = request.args.get('deadline')
-    todo_task = request.args.get('todo_task')
+    todo_task = request.args.get('todo_task') == 'true'
     members = request.args.get('members')
+    if members == '':
+        members = []
+    if not isinstance(members, list):
+        members = [members]
     InternetTalker.add_task(groupId,task_name, description, deadline, todo_task, members)
-    return redirect(f'/group/{groupName}/?id={groupId}')
+    return redirect(url_for('group.selectGroup',name=groupName, id=groupId))
+
     

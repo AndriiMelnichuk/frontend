@@ -221,10 +221,10 @@
                 <h1>Create task</h1>
                 
                     <label for="title">Title:</label>
-                    <input type="text" id="title" name="task_name" class="modal-input-text" placeholder="Title...">    
+                    <input type="text" id="create-task-title" name="task_name" class="modal-input-text" placeholder="Title...">    
                 
                     <label>Description:</label>
-                    <textarea name="description" placeholder="Description..."></textarea>
+                    <textarea id="create-task-des" name="description" placeholder="Description..."></textarea>
                 
                     <label>Assign to:</label>
                     <div class="select-box" id="create-task-select-box">
@@ -239,9 +239,9 @@
                     </select>
                 
                     <label>Complete before:</label>
-                    <input type="date">
+                    <input id="create-task-dead" type="date"/>
                 
-                <button onclick="taskCreate()" class="submit-button">Create</button>
+                <button type="button" onclick="taskCreate()" class="submit-button">Create</button>
             </form>
         </div>
     </div>
@@ -280,25 +280,25 @@
 
 <script>
     function taskCreate(){
-        var modal = document.getElementById('modalTasks')
-        var inputs = modal.getElementsByTagName('input')
-        var task_name = inputs[0].value
-        var description = modal.getElementsByTagName('textarea')[0].value
-        var deadline = inputs[2].value
-        var todo_task = modal.getElementsByTagName('selector')[0].value == "true"
-        console.log(modal.getElementsByTagName('selector')[0].value)
+        console.log('hello')
+        var task_name = document.getElementById('create-task-title').value
+        var description = document.getElementById('create-task-des').value
+        var deadline = document.getElementById('create-task-dead').value
+        var todo_task = document.getElementById('mySelector')[0].value == "true"
+        console.log(document.getElementById('mySelector')[0].value)
         var members = selectedCreateTask
-        fetch('/task/create/{{group_name}}/{{group_id}}?task_name={task_name}&description={description}&deadline={deadline}&todo_task={todo_task}&members={members}')
+        const url = `/task/create/{{group_name}}/{{group_id}}?` +
+            `task_name=${encodeURIComponent(task_name)}` +
+            `&description=${encodeURIComponent(description)}` +
+            `&deadline=${encodeURIComponent(deadline)}` +
+            `&todo_task=${encodeURIComponent(todo_task)}` +
+            `&members=${encodeURIComponent(members)}`;
+        fetch(url)
         .then(response => {
-            if (response.ok){
-                return response.json()
-            }
-            else {
-                throw new Error('oшибка создания таски')
-            }})
-        .then(data => {
-            location.reload()
-        })
+        if (response.redirected) {
+            window.location.href = response.url; // Обрабатывает редирект автоматически
+        }})
+        .catch(error => console.error('Error:', error));
 
     }
 </script>
