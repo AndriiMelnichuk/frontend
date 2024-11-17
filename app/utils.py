@@ -110,7 +110,6 @@ class InternetTalker:
         deadline = resp_data['deadline']
         members = resp_data['members']
         todo_task = resp_data['todo_task']
-        # TODO Task created
         tasks = [
             Task(task_id[i], task_name[i], description[i], members[i], todo_task[i], deadline[i])
         for i in range(len(task_id))]
@@ -141,6 +140,8 @@ class InternetTalker:
             headers=head,
             json=data
         )
+        a = resp.json()
+        pass
         # resp_data = resp.json()
 
 
@@ -158,12 +159,34 @@ class InternetTalker:
             headers=head,
             json=data
         )
+        a = resp.json()
+        pass
         # resp_data = resp.json()
 
 
     @staticmethod
-    def updateTask(group_id, task_id, data):
-        pass
+    def updateTask(group_id, data):
+        deadline = '2099-01-01' if data['date'] == '' else data['date']
+        head = {'Content-Type': 'application/json'}
+        data = {
+            'type': 'update_task',
+            
+            "group_id": int(group_id),
+            "task_id": data["id"],
+            "task_name": data['title'],
+            "description": data['description'],
+            "deadline": deadline,
+            "todo_task": data['status'] == 'true',
+            "members": data['assigned'],
+            'jwt': session['jwt']
+        }
+        resp = req.post(
+            url=url,
+            headers=head,
+            json=data
+        )
+        resp_data = resp.json()
+        return resp_data['group_id']
 
 
     @staticmethod
