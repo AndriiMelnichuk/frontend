@@ -147,13 +147,17 @@
                     Users
                 {% endif %}
             </a>
-            <a type="button" href="/group/delete/{{group_id}}" class="delete-group">
+            
                 {% if isAdmin %} 
+                <a type="button" href="/group/delete/{{group_id}}" class="delete-group">
                     Delete group
+                </a>
                 {% else %}
+                <a type="button" href="/group/leave/{{group_id}}/{{group_name}}" class="delete-group">
                     Leave group
+                </a>
                 {% endif %}
-            </a> 
+            
         </div>
     </div>
 

@@ -11,7 +11,6 @@ task = Blueprint('task', __name__)
 @task.route('/<groupId>')
 def getTasks(groupId):
     tasks = InternetTalker.getTasksFromGroup(groupId)
-    # TODO modify feature 
     return jsonify([{'id': t.id,
                      'title': t.title,
                      'description': t.description,
@@ -25,7 +24,6 @@ def updateTask(group_name):
     id = request.args.get('id')
     data = request.args.get('data')
     data = json.loads(data)
-    # TODO Настроить обработку данных и их отпраку
     InternetTalker.updateTask(id, data)
     return redirect(url_for('group.selectGroup',name=group_name, id=id))
 

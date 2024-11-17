@@ -7,7 +7,10 @@ def updateSession(username, token):
         session['username'] = username
 
 url = 'http://localhost:5001/'
+url = 'http://user-service:5001/'
+
 urlSearch = 'http://localhost:5010/'
+urlSearch = 'http://search:5010/'
 class InternetTalker:
     """
         Class for work with other services
@@ -208,22 +211,22 @@ class InternetTalker:
  
 
     @staticmethod
-    def isAdministrator(groupName):
-        # head = {'Content-Type': 'application/json'}
-        # data = {
-        #     'type': 'is_admin',
-        #     'group_id': groupName,
-        #     'jwt': session['jwt']
-        # }
-        # resp = req.post(
-        #     url=url,
-        #     headers=head,
-        #     json=data
-        # )
-        # resp_data = resp.json()
-        # TODO Could be problems
-        resp_data = True
-        return resp_data
+    def isAdministrator(id):
+        id = int(id)
+        head = {'Content-Type': 'application/json'}
+        data = {
+            'type': 'is_admin',
+            'group_id': id,
+            'jwt': session['jwt']
+        }
+        resp = req.post(
+            url=url,
+            headers=head,
+            json=data
+        )
+        resp_data = resp.json()
+        # resp_data = False
+        return resp_data['is_admin']
     
     @staticmethod 
     def deleteGroup(group_id):
@@ -271,6 +274,8 @@ class InternetTalker:
             headers=head,
             json=data
         )
+        a = resp.json()
+        pass
     
 
     @staticmethod
@@ -278,7 +283,7 @@ class InternetTalker:
         head = {'Content-Type': 'application/json'}
         data = {
             'type': 'add_member_to_group',
-            'group_id': group_id,
+            'group_id': int(group_id),
             'member': name,
             'jwt': session['jwt']
         }
@@ -287,6 +292,8 @@ class InternetTalker:
             headers=head,
             json=data
         )
+        res = resp.json()
+        pass
 
     @staticmethod
     def getGroupsBySearch(text):
