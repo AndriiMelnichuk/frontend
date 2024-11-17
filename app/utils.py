@@ -176,7 +176,7 @@ class InternetTalker:
             "task_name": data['title'],
             "description": data['description'],
             "deadline": deadline,
-            "todo_task": data['status'] == 'true',
+            "todo_task": 'True' if data['status'] == 'true' else 'False',
             "members": data['assigned'],
             'jwt': session['jwt']
         }
@@ -186,7 +186,8 @@ class InternetTalker:
             json=data
         )
         resp_data = resp.json()
-        return resp_data['group_id']
+        pass
+
 
 
     @staticmethod
