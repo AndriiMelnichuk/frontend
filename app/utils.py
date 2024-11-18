@@ -7,10 +7,10 @@ def updateSession(username, token):
         session['username'] = username
 
 url = 'http://localhost:5001/'
-url = 'http://user-service:5001/'
+# url = 'http://user-service:5001/'
 
 urlSearch = 'http://localhost:5010/'
-urlSearch = 'http://search:5010/'
+# urlSearch = 'http://search:5010/'
 class InternetTalker:
     """
         Class for work with other services
@@ -303,19 +303,19 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         resp = req.post(
-            url=url + '/group',
+            url=urlSearch + '/group',
             headers=head,
             json=data
-        )
+        ).json()
         l = len(resp['id'])
         id = resp['id']
-        name = resp['name']
+        name = resp['group']
         res = [
             Group(
                 id[i],
                 name[i]
             )
-        for i in range(len(l))]
+        for i in range(l)]
         # res = [Group(i, f'Group: {i}') for i in range(3)]
         return res 
 
