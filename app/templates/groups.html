@@ -64,19 +64,22 @@
                      
     function helper() {
         var text = searchInput.value
-        cont.innerHTML = ''
-        fetch('/groups/search/?group_name='+text)
-        .then(r => r.json())
-        .then(data => 
-            data.forEach(d => {
-                var e = document.createElement('a')
-                e.text = d.name
-                e.classList.add('group-element')
-                
-                e.href = '/group/'+encodeURIComponent(d.name)+'?id='+encodeURIComponent(d.id)
-                cont.appendChild(e)
-            })
-    )   
+        if (text.trim().length != 0){
+            cont.innerHTML = ''
+            fetch('/groups/search/?group_name='+text)
+            .then(r => r.json())
+            .then(data => 
+                data.forEach(d => {
+                    var e = document.createElement('a')
+                    e.text = d.name
+                    e.classList.add('group-element')
+                    
+                    e.href = '/group/'+encodeURIComponent(d.name)+'?id='+encodeURIComponent(d.id)
+                    cont.appendChild(e)
+                })
+            )  
+        }
+ 
     }  
     
 </script>
