@@ -7,10 +7,10 @@ def updateSession(username, token):
         session['username'] = username
 
 url = 'http://localhost:5001/'
-# url = 'http://user-service:5001/'
+url = 'http://user-service:5001/'
 
 urlSearch = 'http://localhost:5010/'
-# urlSearch = 'http://search:5010/'
+urlSearch = 'http://search:5010/'
 class InternetTalker:
     """
         Class for work with other services
