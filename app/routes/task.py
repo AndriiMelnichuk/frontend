@@ -42,9 +42,32 @@ def deleteTask(groupName, taskId, groupId):
 
 @task.route('/search/<groupId>')
 def searchTasksInGroupRoute(groupId):
-    # tasks = InternetTalker.searchTasksInGroup()
-    # TODO: Нужно будет удалить этот роут. Во время запроса заданий будет проверятся поиск и фильтр
-    pass
+    q = request.args.get('query')
+    assigned_to = request.args.get('assigned_to').split(',')
+
+    if assigned_to == ['']:
+        assigned_to = []
+    if not isinstance(assigned_to, list):
+        assigned_to = [assigned_to]
+
+    deadline = request.args.get('complete_before')
+    status = request.args.get('status')
+    is_date = request.args.get('isdate') == 'true'
+    if is_date:
+        if deadline == '':
+            deadline = '2099-01-01'
+    else:
+        deadline = '2099-01-01'
+    deadline += 'T00:00:00'
+    
+    tasks = InternetTalker.searchTasksInGroup(q, assigned_to, deadline, status, is_date, groupId)
+    return jsonify([{'id': t.id,
+                    'title': t.title,
+                    'description': t.description,
+                    'assigned': t.assigned,
+                    'status': t.status,
+                    'date': t.date} for t in tasks])
+    
 
 @task.route('/create/<groupName>/<groupId>')
 def createTaskRoute(groupName, groupId):
@@ -53,8 +76,8 @@ def createTaskRoute(groupName, groupId):
     description = request.args.get('description')
     deadline = request.args.get('deadline')
     todo_task = 'True' if request.args.get('todo_task') == 'true' else 'False'
-    members = request.args.get('members')
-    if members == '':
+    members = request.args.get('members').split(',')
+    if members == ['']:
         members = []
     if not isinstance(members, list):
         members = [members]
