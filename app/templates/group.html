@@ -583,19 +583,28 @@ function showElement(text){
         // selectedAssignedToValues
         const date = document.getElementById("due-date")
         const select = document.getElementById("status")
-        const url = '/task/search/{{group_id}}?' +
+        const isDate = document.getElementById('select-no-date')
+        tasksCont.innerHTML = ""
+        if (!isDate.checked || select.value || searchLine.value || selectedAssignedToValues.length != 0){
+            const url = '/task/search/{{group_id}}?' +
             `query=${encodeURIComponent(searchLine.value.trim())}` +
             `&assigned_to=${encodeURIComponent(selectedAssignedToValues)}` +
             `&complete_before=${encodeURIComponent(date.value)}` +
             `&status=${encodeURIComponent(select.value)}` +
-            `&isdate=${encodeURIComponent(!document.getElementById('select-no-date').checked)}`
-
-        if (date.value || select.value || searchLine.value || selectedAssignedToValues.length != 0){
-            tasksCont.innerHTML = ""
+            `&isdate=${encodeURIComponent(!isDate.checked)}`
             fetch(url)
             .then(response => response.json())
             .then(data => {
                 data.forEach(task => {
+                    addTask2TaskList(task)
+                })
+            })
+        }
+        else {
+            fetch('/task/{{group_id}}')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(task =>{
                     addTask2TaskList(task)
                 })
             })
