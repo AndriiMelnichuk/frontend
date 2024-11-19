@@ -391,12 +391,14 @@ function showElement(text){
                     userDiv.appendChild(u)
                     
                     {% if isAdmin %}
-                        var deleteButton = document.createElement('a');
-                        deleteButton.classList.add('delete-user')
-                        deleteButton.textContent = 'Delete';
-											deleteButton.href ='/group/delete/{{group_id}}/{{group_name}}/'+user;
-                        deleteButton.classList.add('delete-button');
-                        userDiv.appendChild(deleteButton)
+                        if (user !== "{{session['username']}}"){
+                            var deleteButton = document.createElement('a');
+                            deleteButton.classList.add('delete-user')
+                            deleteButton.textContent = 'Delete';
+                            deleteButton.href ='/group/delete/{{group_id}}/{{group_name}}/'+user;
+                            deleteButton.classList.add('delete-button');
+                            userDiv.appendChild(deleteButton)
+                        }
                     {% endif %} 
 
                     modalDataUser.appendChild(userDiv)
@@ -653,15 +655,15 @@ function showElement(text){
         com.classList.add('complete-button')
         com.innerHTML = 'Complete'
         com.type = 'button'
-        com.href = '/task/complete/{{group_name}}/' + task.id + '/' + {{group_id}}
+        com.href = '/task/complete/{{group_name}}/' + task.id + '/' + '{{group_id}}'
         elem.appendChild(com)
 
-        {% if isAdmin %}	
+        
         var del = document.createElement('a')
         del.classList.add('delete-task')
         del.innerHTML = 'Delete'
         del.type = 'button'
-        del.href = '/task/delete/{{group_name}}/' + task.id + '/' + {{group_id}}
+        del.href = '/task/delete/{{group_name}}/' + task.id + '/' + '{{group_id}}'
         elem.appendChild(del)
         
         var upd = document.createElement('a')
@@ -673,6 +675,6 @@ function showElement(text){
         })
         elem.appendChild(upd)
 
-        {% endif %}
+        
     }
 </script>
