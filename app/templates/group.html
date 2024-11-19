@@ -165,33 +165,38 @@
     <!-- Основной контент -->
     <div class="content" id="content">
         <!-- Поиск задания -->
-		<form action="/task/search/{{group_id}}" method="get">
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" name="query" placeholder="Search..."> <!-- Добавлен атрибут name -->
-                    <button class="filter-button" type="button" onclick="toggleFilter()">Filter</button>
-                    <button type="submit">Search</button> <!-- Убрано href, так как это не требуется для кнопки submit -->
-                </div>
-        
-                <div class="filter" id="filter">
-                    <label>Assigned to:</label>
-                    <div class="select-box" id="assigned-to-select-box">
-                        <input type="text" name="assigned_to" readonly placeholder="Assigned-to"> <!-- Добавлен атрибут name -->
-                        <div class="options-container"></div>
-                    </div>
-
-                    <label>Complete before:</label>
-                    <input type="date" id="due-date" name="complete_before" placeholder="Complete before" /> <!-- Добавлен атрибут name -->
-        
-                    <label for="status">Status:</label>
-                    <select id="status" name="status"> <!-- Добавлен атрибут name -->
-                        <option value="">None</option>
-                        <option value="false">Waiting</option>
-                        <option value="true">In process</option>
-                    </select>
-                </div>
+        <div class="search-container">
+            <div class="search-box">
+                <input id="search-line" type="text" name="query" placeholder="Search...">
+                <button class="filter-button" type="button" onclick="toggleFilter()">Filter</button>
+                <button onclick="taskSearch()" type="button">Search</button> 
             </div>
-        </form>
+    
+            <div class="filter" id="filter">
+                <label>Assigned to:</label>
+                <div class="select-box" id="assigned-to-select-box">
+                    <input type="text" name="assigned_to" readonly placeholder="Assigned-to">
+                    <div class="options-container"></div>
+                </div>
+
+                <label>Complete before:</label>
+                <label>
+                    <input id="select-no-date" type="radio" name="options" value="true" onclick="showElement('element1')" checked> No date
+                </label>
+                <label>
+                    <input  id="select-yes-date" type="radio" name="options" value="false" onclick="showElement('element2')"> Select date
+                </label>
+                <input type="date" id="due-date" name="complete_before" placeholder="Complete before"/>
+    
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="">None</option>
+                    <option value="false">Waiting</option>
+                    <option value="true">In process</option>
+                </select>
+            </div>
+        </div>
+        
         
         <!-- Задания -->
         <div class="tasks">
@@ -209,7 +214,7 @@
                 {% if isAdmin %}
                 <form action="/group/addUser/{{group_id}}/{{group_name}}">
                     <div class="add-user-div">
-                        <input type="text" name="user" placeholder="New user"/>
+                        <input type="text" name="user" placeholder="New user" required/>
                         <button type="submit">Add user</button>
                     </div>
                 </form>
@@ -233,7 +238,7 @@
                 
                     <label>Assign to:</label>
                     <div class="select-box" id="create-task-select-box">
-                        <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to"> <!-- Добавлен атрибут name -->
+                        <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to">
                         <div class="options-container"></div>
                     </div>
 
@@ -266,7 +271,7 @@
                 
                     <label>Assign to:</label>
                     <div class="select-box" id="update-task-select-box">
-                        <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to"> <!-- Добавлен атрибут name -->
+                        <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to">
                         <div class="options-container"></div>
                     </div>
 
@@ -289,7 +294,20 @@
 
 </html>
 
+<!-- visible date -->
+<script>
 
+
+function showElement(text){
+    var date = document.getElementById('due-date')
+    if (text == 'element1'){
+        date.style.display = 'none'
+    }
+    else {
+        date.style.display = 'block'
+    }
+}
+</script>
 
 <!-- Task create -->
 <script>
@@ -316,6 +334,7 @@
         }
     }
 </script>
+
 
 <!-- main script -->
 <script>
@@ -444,7 +463,6 @@
 			var nassigned = selectedList	
 			var ndate = inputs[2].value
             var nstatus = document.getElementById('update-selector').value
-            console.log('hello from button')
 			var res = {
 				id: id,
 				title: ntitle,
@@ -469,6 +487,13 @@
 <script>
     // Функция для переключения видимости фильтра
     function toggleFilter() {
+        console.log(document.getElementById('select-no-date'))
+        if (document.getElementById('select-no-date').checked){
+            showElement('element1')
+        }
+        else{
+            showElement('element2')
+        }
         const filter = document.getElementById('filter');
         filter.style.display = filter.style.display === 'block' ? 'none' : 'block';
     }
@@ -541,75 +566,104 @@
     settingModal(modalUsers, openModalBtnUser, spanUser);
 </script>
 
-<!-- tasks add -->
+<!-- tasks search -->
 <script>
     var tasksCont = document.getElementsByClassName('tasks')[0]
     fetch('/task/{{group_id}}')
     .then(response => response.json())
     .then(data => {
         data.forEach(task =>{
-            var elem =document.createElement('div')
-            elem.classList.add('task-card')
-            var title = document.createElement('h2')
-            title.innerHTML = task.title
-						var des = document.createElement('p')
-						des.innerHTML = 'Description ' + task.title + ': ' + task.description
-
-						var taskInfo = document.createElement('div')
-						taskInfo.classList.add('task-info')
-						var asTo = document.createElement('span')
-						asTo.innerHTML = 'Assigned to: ' + task.assigned.join(', ')
-						var comp = document.createElement('span')
-                        if (task.date.slice(0,4) != '2099')
-						    comp.innerHTML = 'Complete before: ' + task.date.slice(0, -9)
-                        else
-                            comp.innerHTML = 'Complete before: without date'
-                        var statusL = document.createElement('span')
-                        console.log('task status')
-                        console.log(task.status)
-                        if (task.status)
-                            statusL.innerHTML = 'Status: in process'
-                        else
-                            statusL.innerHTML = 'Status: waiting'
-
-						taskInfo.appendChild(asTo)
-						asTo.insertAdjacentText('afterend',' | ')
-						taskInfo.appendChild(comp)
-                        comp.insertAdjacentText('afterend',' | ')
-                        taskInfo.appendChild(statusL)
-
-
-            elem.appendChild(title)
-						elem.appendChild(des )
-						elem.appendChild(taskInfo)
-						
-						tasksCont.appendChild(elem)
-
-						var com = document.createElement('a')
-						com.classList.add('complete-button')
-						com.innerHTML = 'Complete'
-						com.type = 'button'
-						com.href = '/task/complete/{{group_name}}/' + task.id + '/' + {{group_id}}
-						elem.appendChild(com)
-
-						{% if isAdmin %}	
-						var del = document.createElement('a')
-						del.classList.add('delete-task')
-						del.innerHTML = 'Delete'
-						del.type = 'button'
-						del.href = '/task/delete/{{group_name}}/' + task.id + '/' + {{group_id}}
-						elem.appendChild(del)
-						
-						var upd = document.createElement('a')
-						upd.classList.add('update-task')
-						upd.innerHTML = 'Update'
-						upd.type = 'button'
-						upd.addEventListener('click', ()=>{
-						openModalUpdate(task.id, task.title, task.description, task.assigned, task.date, task.status)
-					})
-						elem.appendChild(upd)
-
-						{% endif %}
+            addTask2TaskList(task)
         })
     })
+
+    function taskSearch(){
+        event.preventDefault()
+        const searchLine = document.getElementById('search-line')
+        // selectedAssignedToValues
+        const date = document.getElementById("due-date")
+        const select = document.getElementById("status")
+        const url = '/task/search/{{group_id}}?' +
+            `query=${encodeURIComponent(searchLine.value.trim())}` +
+            `&assigned_to=${encodeURIComponent(selectedAssignedToValues)}` +
+            `&complete_before=${encodeURIComponent(date.value)}` +
+            `&status=${encodeURIComponent(select.value)}` +
+            `&isdate=${encodeURIComponent(!document.getElementById('select-no-date').checked)}`
+
+        if (date.value || select.value || searchLine.value || selectedAssignedToValues.length != 0){
+            tasksCont.innerHTML = ""
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(task => {
+                    addTask2TaskList(task)
+                })
+            })
+        }
+
+        
+    }
+
+    function addTask2TaskList(task){
+        var elem =document.createElement('div')
+        elem.classList.add('task-card')
+        var title = document.createElement('h2')
+        title.innerHTML = task.title
+        var des = document.createElement('p')
+        des.innerHTML = 'Description ' + task.title + ': ' + task.description
+
+        var taskInfo = document.createElement('div')
+        taskInfo.classList.add('task-info')
+        var asTo = document.createElement('span')
+        asTo.innerHTML = 'Assigned to: ' + task.assigned.join(', ')
+        var comp = document.createElement('span')
+        if (task.date.slice(0,4) != '2099')
+            comp.innerHTML = 'Complete before: ' + task.date.slice(0, -9)
+        else
+            comp.innerHTML = 'Complete before: without date'
+        var statusL = document.createElement('span')
+        if (task.status)
+            statusL.innerHTML = 'Status: in process'
+        else
+            statusL.innerHTML = 'Status: waiting'
+
+        taskInfo.appendChild(asTo)
+        asTo.insertAdjacentText('afterend',' | ')
+        taskInfo.appendChild(comp)
+        comp.insertAdjacentText('afterend',' | ')
+        taskInfo.appendChild(statusL)
+
+
+        elem.appendChild(title)
+        elem.appendChild(des )
+        elem.appendChild(taskInfo)
+        
+        tasksCont.appendChild(elem)
+
+        var com = document.createElement('a')
+        com.classList.add('complete-button')
+        com.innerHTML = 'Complete'
+        com.type = 'button'
+        com.href = '/task/complete/{{group_name}}/' + task.id + '/' + {{group_id}}
+        elem.appendChild(com)
+
+        {% if isAdmin %}	
+        var del = document.createElement('a')
+        del.classList.add('delete-task')
+        del.innerHTML = 'Delete'
+        del.type = 'button'
+        del.href = '/task/delete/{{group_name}}/' + task.id + '/' + {{group_id}}
+        elem.appendChild(del)
+        
+        var upd = document.createElement('a')
+        upd.classList.add('update-task')
+        upd.innerHTML = 'Update'
+        upd.type = 'button'
+        upd.addEventListener('click', ()=>{
+        openModalUpdate(task.id, task.title, task.description, task.assigned, task.date, task.status)
+        })
+        elem.appendChild(upd)
+
+        {% endif %}
+    }
 </script>

@@ -358,6 +358,37 @@ class InternetTalker:
         pass
 
 
+    @staticmethod
+    def searchTasksInGroup(q, assigned_to, complete_before, status, is_date, groupId):
+        head = {'Content-Type': 'application/json'}
+        data = {
+            'type': 'get_tasks_for_group',
+            'jwt': session['jwt'],
+            "group_id": groupId,
+            "text": q,
+            "assigned_to": assigned_to,
+            "complete_before": complete_before,
+            "status": status,
+            "is_date": is_date
+        }
+        resp = req.post(
+            url=urlSearch + '/task',
+            headers=head,
+            json=data
+        )
+        resp_data = resp.json()
+        task_id = resp_data['id']
+        task_name = resp_data['title']
+        description = resp_data['description']
+        deadline = resp_data['deadline']
+        members = resp_data['assigned']
+        todo_task = resp_data['status']
+        tasks = [
+            Task(task_id[i], task_name[i], description[i], members[i], todo_task[i], deadline[i])
+        for i in range(len(task_id))]
+        return tasks
+
+
 class Validator:
     """Класс для валидации данных"""
     @staticmethod
