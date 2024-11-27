@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 TEST.html
 .mypy_cache/
+temp.py
