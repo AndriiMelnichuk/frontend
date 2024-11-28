@@ -1,6 +1,6 @@
 from flask import session
 from app.models import *
-from app.rabbitMQ import RabbitMQProducer, RpcClient
+from app.rabbitMQ import RpcClient
 import requests as req
 import pika
 import json
@@ -12,8 +12,8 @@ def updateSession(username, token):
 
 user_service_queue = 'user_service_queue'
 search_queue = 'search_queue'
-producer = RabbitMQProducer()
-producer.start_consumer()
+# producer = RabbitMQProducer()
+producer = ''
 class InternetTalker:
     """
         Class for work with other services
@@ -51,7 +51,7 @@ class InternetTalker:
             'email': email
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data)
+        resp_data = rpc_client.call(data, user_service_queue)
         
         if 'error' in resp_data.keys():
             return resp_data['error']
@@ -69,7 +69,7 @@ class InternetTalker:
             'password': password
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data)
+        resp_data = rpc_client.call(data, user_service_queue)
         if 'error' in resp_data.keys():
             return resp_data['error']
         else:
