@@ -1,6 +1,6 @@
 from flask import session
 from app.models import *
-from app.rabbitMq.producer import RabbitMQProducer
+from app.rabbitMQ import RabbitMQProducer, RpcClient
 import requests as req
 import pika
 import json
@@ -12,6 +12,8 @@ def updateSession(username, token):
 
 user_service_queue = 'user_service_queue'
 search_queue = 'search_queue'
+producer = RabbitMQProducer()
+producer.start_consumer()
 class InternetTalker:
     """
         Class for work with other services
@@ -20,7 +22,6 @@ class InternetTalker:
     def __init__(self):
         super().__init__()
         
-
 
     @staticmethod
     def isAccesToken():
@@ -34,7 +35,7 @@ class InternetTalker:
             'type': 'get_groups',
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         res = []
         for i in range(len(resp_data['group_id'])):
             res.append(Group(resp_data['group_id'][i], resp_data['group'][i]))
@@ -49,7 +50,8 @@ class InternetTalker:
             'password': password,
             'email': email
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data)
         
         if 'error' in resp_data.keys():
             return resp_data['error']
@@ -66,7 +68,8 @@ class InternetTalker:
             'username': username,
             'password': password
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data)
         if 'error' in resp_data.keys():
             return resp_data['error']
         else:
@@ -82,7 +85,10 @@ class InternetTalker:
             'group_id': id,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+
+        print(f'hello 1 from get tasks from group: {data}')
+        resp_data = producer.send_message_with_response(user_service_queue, data)
+        print(f'hello from get tasks from group: {resp_data}')
         task_id = resp_data['task_id']
         task_name = resp_data['task_name']
         description = resp_data['description']
@@ -104,7 +110,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
 
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
         # resp_data = resp.json()
 
@@ -117,7 +123,7 @@ class InternetTalker:
             'task_id': task_id,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
         # resp_data = resp.json()
 
@@ -136,7 +142,7 @@ class InternetTalker:
             "members": data['assigned'],
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
 
 
@@ -147,7 +153,7 @@ class InternetTalker:
             'group': groupName,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         return resp_data['group_id']
  
 
@@ -160,7 +166,7 @@ class InternetTalker:
             'group_id': id,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         return resp_data['is_admin']
     
 
@@ -171,7 +177,7 @@ class InternetTalker:
             'group_id': group_id,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
 
 
@@ -182,7 +188,7 @@ class InternetTalker:
             'group_id': group_id,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         res = resp_data['users']
         return res
 
@@ -194,7 +200,7 @@ class InternetTalker:
             'member': username,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
     
 
@@ -206,7 +212,7 @@ class InternetTalker:
             'member': name,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(user_service_queue, data)
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
 
 
@@ -216,7 +222,7 @@ class InternetTalker:
             'text': text,
             'jwt': session['jwt']
         }
-        resp = RabbitMQProducer().send_message_with_response(search_queue, data)
+        resp = producer.send_message_with_response(search_queue, data)
         l = len(resp['id'])
         id = resp['id']
         name = resp['group']
@@ -250,16 +256,16 @@ class InternetTalker:
         
         data = {
             'type': 'add_task',
-            "group_id": group_id,
+            "group_id": int(group_id),
             "task_name": task_name,
             "description": description,
             "deadline": deadline,
             "todo_task": todo_task,
             "members": members,
-            'group_id': group_id,
             'jwt': session['jwt']
         }
-        resp_data = RabbitMQProducer().send_message_with_response(search_queue, data)
+
+        resp_data = producer.send_message_with_response(user_service_queue, data)
         pass
 
 
@@ -276,7 +282,7 @@ class InternetTalker:
             "status": status,
             "is_date": is_date
         }
-        resp_data = RabbitMQProducer().send_message_with_response(search_queue, data)
+        resp_data = producer.send_message_with_response(search_queue, data)
         
         task_id = resp_data['id']
         task_name = resp_data['title']
@@ -328,7 +334,8 @@ def decode_group(group_str):
     id, name, administrator = map(str.strip, group_str.split(', '))
     return Group(id=int(id), name=name.split(), administrator=administrator.strip())
 
-
+if __name__ == '__main__':
+    print('hello')
 
 
 
