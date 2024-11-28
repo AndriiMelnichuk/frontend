@@ -35,7 +35,8 @@ class InternetTalker:
             'type': 'get_groups',
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         res = []
         for i in range(len(resp_data['group_id'])):
             res.append(Group(resp_data['group_id'][i], resp_data['group'][i]))
@@ -87,7 +88,8 @@ class InternetTalker:
         }
 
         print(f'hello 1 from get tasks from group: {data}')
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         print(f'hello from get tasks from group: {resp_data}')
         task_id = resp_data['task_id']
         task_name = resp_data['task_name']
@@ -110,7 +112,8 @@ class InternetTalker:
             'jwt': session['jwt']
         }
 
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
         # resp_data = resp.json()
 
@@ -123,7 +126,8 @@ class InternetTalker:
             'task_id': task_id,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
         # resp_data = resp.json()
 
@@ -142,7 +146,8 @@ class InternetTalker:
             "members": data['assigned'],
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
 
 
@@ -153,7 +158,8 @@ class InternetTalker:
             'group': groupName,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         return resp_data['group_id']
  
 
@@ -166,7 +172,8 @@ class InternetTalker:
             'group_id': id,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         return resp_data['is_admin']
     
 
@@ -177,7 +184,8 @@ class InternetTalker:
             'group_id': group_id,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
 
 
@@ -188,7 +196,8 @@ class InternetTalker:
             'group_id': group_id,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         res = resp_data['users']
         return res
 
@@ -200,7 +209,8 @@ class InternetTalker:
             'member': username,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
     
 
@@ -212,7 +222,8 @@ class InternetTalker:
             'member': name,
             'jwt': session['jwt']
         }
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
 
 
@@ -222,7 +233,8 @@ class InternetTalker:
             'text': text,
             'jwt': session['jwt']
         }
-        resp = producer.send_message_with_response(search_queue, data)
+        rpc_client = RpcClient()
+        resp = rpc_client.call(data, user_service_queue)
         l = len(resp['id'])
         id = resp['id']
         name = resp['group']
@@ -265,7 +277,8 @@ class InternetTalker:
             'jwt': session['jwt']
         }
 
-        resp_data = producer.send_message_with_response(user_service_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         pass
 
 
@@ -282,7 +295,8 @@ class InternetTalker:
             "status": status,
             "is_date": is_date
         }
-        resp_data = producer.send_message_with_response(search_queue, data)
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
         
         task_id = resp_data['id']
         task_name = resp_data['title']
