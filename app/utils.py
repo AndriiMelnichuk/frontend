@@ -230,11 +230,12 @@ class InternetTalker:
     @staticmethod
     def getGroupsBySearch(text):
         data = {
+            'type': 'group',
             'text': text,
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp = rpc_client.call(data, user_service_queue)
+        resp = rpc_client.call(data, search_queue)
         l = len(resp['id'])
         id = resp['id']
         name = resp['group']
@@ -286,7 +287,7 @@ class InternetTalker:
     def searchTasksInGroup(q, assigned_to, complete_before, status, is_date, groupId):
         
         data = {
-            'type': 'get_tasks_for_group',
+            'type': 'task',
             'jwt': session['jwt'],
             "group_id": groupId,
             "text": q,
@@ -296,7 +297,7 @@ class InternetTalker:
             "is_date": is_date
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, search_queue)
         
         task_id = resp_data['id']
         task_name = resp_data['title']
