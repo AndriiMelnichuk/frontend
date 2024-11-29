@@ -154,7 +154,7 @@
                     Delete group
                 </a>
                 {% else %}
-                <a type="button" href="/group/leave/{{group_id}}/{{group_name}}" class="delete-group">
+                <a type="button" href="/group/leave/{{group_id}}/{{session['username']}}" class="delete-group">
                     Leave group
                 </a>
                 {% endif %}
