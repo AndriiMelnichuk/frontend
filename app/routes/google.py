@@ -9,6 +9,8 @@ google = Blueprint('google', __name__)
 @google.route('/')
 def google_autorize():
     jwt = request.args.get('jwt')
+    if InternetTalker.isEmailExist(jwt):
+        return redirect('/')    
     return render_template('google-entry.html', jwt=jwt)
     
 @google.route('/username/<jwt>/')

@@ -329,6 +329,25 @@ class InternetTalker:
             updateSession(username, jwt)
             return ''
         
+    @staticmethod
+    def isEmailExist(jwt):
+        data = {
+            'type': 'google_sign_up',
+            'username': '',
+            'jwt': jwt,
+        }
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
+        if 'error' in resp_data.keys():
+            print('error: ', resp_data)
+            return False
+        else:
+            jwt = resp_data['jwt']
+            username = resp_data['username']
+            print(f'ok, jwt: {jwt}')
+            updateSession(username, jwt)
+            return True
+        
 
 
 class Validator:
