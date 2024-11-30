@@ -311,6 +311,26 @@ class InternetTalker:
         return tasks
 
 
+    @staticmethod
+    def isGoogleCorrect(username, jwt):
+        data = {
+            'type': 'google_sign_up',
+            'username': username,
+            'jwt': jwt,
+        }
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, user_service_queue)
+        if 'error' in resp_data.keys():
+            print('error: ', resp_data)
+            return resp_data['error']
+        else:
+            jwt = resp_data['jwt']
+            print(f'ok, jwt: {jwt}')
+            updateSession(username, jwt)
+            return ''
+        
+
+
 class Validator:
     """Класс для валидации данных"""
     @staticmethod
@@ -343,6 +363,15 @@ class Validator:
             error_ans += InternetTalker.isSignInCorrect(username, password)
         return error_ans
  
+
+    @staticmethod
+    def getGoogleError(username, jwt):
+        error_ans = ''
+        if len(username) < 4:
+            error_ans = 'Username too short. '
+        else:
+            error_ans = InternetTalker.isGoogleCorrect(username, jwt)
+        return error_ans
 
 def decode_group(group_str):
     group_str = group_str.replace("Group(", "").replace(')',"")

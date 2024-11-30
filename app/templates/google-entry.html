@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoFam</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sign-in-up.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <form class="login-form" action="/google/username/{{jwt}}/">
+            <h1>Sign in</h1>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required value="{{username if username}}">
+            </div>
+            {% if error_message %}
+            <div style="color: red;">{{ error_message }}</div>
+            {% endif %}
+            <button type="submit" class="submit-button">Sign in</button>
+        </form>
+    </div>
+</body>
+</html>

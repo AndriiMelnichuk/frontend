@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
 
-from app.utils import Validator, InternetTalker
+from app.utils import InternetTalker
 from app.models import Group
 
 
