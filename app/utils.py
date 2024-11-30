@@ -5,6 +5,7 @@ import requests as req
 import pika
 import json
 import uuid
+import jwt
 
 def updateSession(username, token):
         session['jwt'] = token
@@ -321,16 +322,19 @@ class InternetTalker:
         rpc_client = RpcClient()
         resp_data = rpc_client.call(data, user_service_queue)
         if 'error' in resp_data.keys():
-            print('error: ', resp_data)
             return resp_data['error']
         else:
             jwt = resp_data['jwt']
-            print(f'ok, jwt: {jwt}')
             updateSession(username, jwt)
             return ''
         
+
     @staticmethod
     def isEmailExist(jwt):
+        def decode_jwt(jwt_token):
+            token = jwt.decode(jwt_token, 'OK_6SOME_SE5CRET', algorithms=['HS256'])
+            return token['username']
+
         data = {
             'type': 'google_sign_up',
             'username': '',
@@ -339,12 +343,10 @@ class InternetTalker:
         rpc_client = RpcClient()
         resp_data = rpc_client.call(data, user_service_queue)
         if 'error' in resp_data.keys():
-            print('error: ', resp_data)
             return False
         else:
             jwt = resp_data['jwt']
-            username = resp_data['username']
-            print(f'ok, jwt: {jwt}')
+            username = decode_jwt(jwt)
             updateSession(username, jwt)
             return True
         
