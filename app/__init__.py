@@ -28,8 +28,7 @@ def create_app():
     @app.before_request
     def clear_session_on_restart():
             if not InternetTalker.isAccesToken():
-                if request.endpoint not in ['main.index', 'static', 'signin.signinRoute', 'signin.validateSignIn', 'signup.signupRoute', 'signup.validateSignUp', None, 'google.google_autorize', 'google.google_login_end']:
-                    a = request.endpoint
+                if request.endpoint not in ['main.index', 'static', 'signin.signinRoute', 'signin.validateSignIn', 'signup.signupRoute', 'signup.validateSignUp', None, 'google.google_autorize', 'google.google_login_end', 'google.google_login', 'google.validate_id_token_code']:
                     return redirect('/')
 
     return app

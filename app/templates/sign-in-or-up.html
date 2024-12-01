@@ -13,66 +13,9 @@
         <div class="button-container">
             <a href="/signin" class="button">Sign in</a>
             <a href="/signup" class="button">Sign up</a>
-            <button onclick="trySampleRequest()" class="button google-button">Sign in with Google</button>
+            <a class="button google-button" href="/google/login/">Sign in with Google</a>
         </div>
     </div>
 
 </body>
-
-<script>
-    var YOUR_CLIENT_ID = '455836721320-ed0nlrlgjjp4m26dltrr7nqo3or5emn2.apps.googleusercontent.com';
-    var YOUR_REDIRECT_URI = 'http://localhost:5000';
-
-    function processUrlToken() {
-        // Url paarse
-        var fragmentString = location.hash.substring(1);
-        var params = {};
-        var regex = /([^&=]+)=([^&]*)/g, m;
-        while (m = regex.exec(fragmentString)) {
-            params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-        }
-
-        if (params['id_token']) {
-            // document.getElementById('jwtOutput').value = params['id_token'];
-            console.log(params['id_token'])
-
-            window.location.href = '/google/?jwt=' + params['id_token'];
-            // Clear URL
-            history.replaceState(null, null, location.pathname);
-
-        }
-    }
-
-    function trySampleRequest() {
-        var nonce = Math.random()
-        localStorage.setItem('nonce', nonce);
-
-        var oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
-        var form = document.createElement('form');
-        form.setAttribute('method', 'GET'); 
-        form.setAttribute('action', oauth2Endpoint);
-
-        var params = {
-            'client_id': YOUR_CLIENT_ID,
-            'redirect_uri': YOUR_REDIRECT_URI,
-            'scope': 'email openid',
-            'nonce': nonce,
-            'response_type': 'id_token'
-        };
-
-        for (var p in params) {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'hidden');
-            input.setAttribute('name', p);
-            input.setAttribute('value', params[p]);
-            form.appendChild(input);
-        }
-
-        document.body.appendChild(form);
-        form.submit();
-    }
-
-
-    window.onload = processUrlToken;
-</script>
 </html>

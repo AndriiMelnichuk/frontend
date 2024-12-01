@@ -4,3 +4,4 @@ __pycache__/
 TEST.html
 .mypy_cache/
 temp.py
+.env

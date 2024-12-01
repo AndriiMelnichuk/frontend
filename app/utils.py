@@ -2,19 +2,26 @@ from flask import session
 from app.models import *
 from app.rabbitMQ import RpcClient
 import requests as req
-import pika
-import json
-import uuid
 import jwt as pyjwt
+import urllib.parse
+from dotenv import load_dotenv
+import os
 
-def updateSession(username, token):
-        session['jwt'] = token
-        session['username'] = username
+
 
 user_service_queue = 'user_service_queue'
 search_queue = 'search_queue'
-# producer = RabbitMQProducer()
-producer = ''
+
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
+load_dotenv(dotenv_path=dotenv_path)
+
+CLIENT_ID = os.getenv('CLIENT_ID')
+CLIENT_SECRET = os.getenv('CLIENT_SECRET')
+REDIRECT_URI = os.getenv('REDIRECT_URI')
+
+
+
 class InternetTalker:
     """
         Class for work with other services
@@ -351,7 +358,6 @@ class InternetTalker:
             return True
         
 
-
 class Validator:
     """Класс для валидации данных"""
     @staticmethod
@@ -394,16 +400,60 @@ class Validator:
             error_ans = InternetTalker.isGoogleCorrect(username, jwt)
         return error_ans
 
+
 def decode_group(group_str):
     group_str = group_str.replace("Group(", "").replace(')',"")
     id, name, administrator = map(str.strip, group_str.split(', '))
     return Group(id=int(id), name=name.split(), administrator=administrator.strip())
 
-if __name__ == '__main__':
-    print('hello')
 
+def get_code_url():
+    
+    auth_url = 'https://accounts.google.com/o/oauth2/v2/auth'
+    params = {
+        'nonce' : 'nonce',
+        'client_id': CLIENT_ID,
+        'redirect_uri': REDIRECT_URI,
+        'response_type': 'code',
+        'scope': 'openid profile email https://www.googleapis.com/auth/calendar.events',
+        'access_type': 'offline'
+    }
+    return f'{auth_url}?{urllib.parse.urlencode(params)}'
 
+def get_jwt(code):
+    if not code:
+        return "Ошибка: код авторизации не найден", 400
+    
+    # Обменяем код на токены
+    token_url = 'https://oauth2.googleapis.com/token'
+    token_data = {
+        'code': code,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'redirect_uri': REDIRECT_URI,
+        'grant_type': 'authorization_code',
+    }
+    
+    # Отправляем запрос на получение токенов
+    token_response = req.post(token_url, data=token_data)
+    token_json = token_response.json()
 
+    if 'error' in token_json:
+        return f"Ошибка: {token_json['error']}", 400
+    
+    # access_token = token_json.get('access_token')
+    id_token = token_json.get('id_token') # jwt
+    access_token = token_json.get('access_token') # for calendar
+    add_calendar_acces(access_token)
+
+    return id_token
+
+def updateSession(username, token):
+        session['jwt'] = token
+        session['username'] = username
+
+def add_calendar_acces(access_token):
+    session['access_token'] = 'access_token'
 
 
 
