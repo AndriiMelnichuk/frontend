@@ -5,7 +5,7 @@ import requests as req
 import pika
 import json
 import uuid
-import jwt
+import jwt as pyjwt
 
 def updateSession(username, token):
         session['jwt'] = token
@@ -332,7 +332,7 @@ class InternetTalker:
     @staticmethod
     def isEmailExist(jwt):
         def decode_jwt(jwt_token):
-            token = jwt.decode(jwt_token, 'OK_6SOME_SE5CRET', algorithms=['HS256'])
+            token = pyjwt.decode(jwt_token, 'OK_6SOME_SE5CRET', algorithms=['HS256'])
             return token['username']
 
         data = {
