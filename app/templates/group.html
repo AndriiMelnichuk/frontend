@@ -624,6 +624,7 @@ function showElement(text){
         var des = document.createElement('p')
         des.innerHTML = 'Description ' + task.title + ': ' + task.description
 
+        // info
         var taskInfo = document.createElement('div')
         taskInfo.classList.add('task-info')
         var asTo = document.createElement('span')
@@ -652,6 +653,7 @@ function showElement(text){
         
         tasksCont.appendChild(elem)
 
+        // Buttons
         var com = document.createElement('a')
         com.classList.add('complete-button')
         com.innerHTML = 'Complete'
@@ -672,9 +674,46 @@ function showElement(text){
         upd.innerHTML = 'Update'
         upd.type = 'button'
         upd.addEventListener('click', ()=>{
-        openModalUpdate(task.id, task.title, task.description, task.assigned, task.date, task.status)
+            openModalUpdate(task.id, task.title, task.description, task.assigned, task.date, task.status)
         })
         elem.appendChild(upd)
+
+        var cal = document.createElement('a')
+        cal.classList.add('complete-button')
+        cal.innerHTML = 'Add to Google calendar'
+        cal.type = 'button'
+        
+        cal.addEventListener('click', ()=>{
+            const url = '/task/add/google/'
+            const taskData = {
+                id: task.id,
+                title: task.title,
+                description: task.description,
+                assigned: task.assigned,
+                date: task.date,
+                status: task.status
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(taskData), 
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // TODO поправить логику, при отправлении ссылки на google
+                location.reload();
+            })
+        })
+
+        elem.appendChild(cal)
 
         
     }

@@ -9,8 +9,10 @@ import os
 
 
 
-user_service_queue = 'user_service_queue'
-search_queue = 'search_queue'
+USER_QUEUE = 'user_service_queue'
+
+SEARCH_QUEUE = 'search_queue'
+CALENDAR_QUEUE = 'calendar_queue'
 
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
@@ -44,7 +46,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         res = []
         for i in range(len(resp_data['group_id'])):
             res.append(Group(resp_data['group_id'][i], resp_data['group'][i]))
@@ -60,7 +62,7 @@ class InternetTalker:
             'email': email
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         
         if 'error' in resp_data.keys():
             return resp_data['error']
@@ -78,7 +80,7 @@ class InternetTalker:
             'password': password
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         if 'error' in resp_data.keys():
             return resp_data['error']
         else:
@@ -97,7 +99,7 @@ class InternetTalker:
 
         print(f'hello 1 from get tasks from group: {data}')
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         print(f'hello from get tasks from group: {resp_data}')
         task_id = resp_data['task_id']
         task_name = resp_data['task_name']
@@ -121,7 +123,7 @@ class InternetTalker:
         }
 
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
         # resp_data = resp.json()
 
@@ -135,7 +137,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
         # resp_data = resp.json()
 
@@ -155,7 +157,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
 
 
@@ -167,7 +169,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         return resp_data['group_id']
  
 
@@ -181,7 +183,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         return resp_data['is_admin']
     
 
@@ -193,7 +195,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
 
 
@@ -205,7 +207,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         res = resp_data['users']
         return res
 
@@ -218,7 +220,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
     
 
@@ -231,7 +233,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
 
 
@@ -243,7 +245,7 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp = rpc_client.call(data, search_queue)
+        resp = rpc_client.call(data, SEARCH_QUEUE)
         l = len(resp['id'])
         id = resp['id']
         name = resp['group']
@@ -287,7 +289,7 @@ class InternetTalker:
         }
 
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         pass
 
 
@@ -305,7 +307,7 @@ class InternetTalker:
             "is_date": is_date
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, search_queue)
+        resp_data = rpc_client.call(data, SEARCH_QUEUE)
         
         task_id = resp_data['id']
         task_name = resp_data['title']
@@ -327,7 +329,7 @@ class InternetTalker:
             'jwt': jwt,
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         if 'error' in resp_data.keys():
             return resp_data['error']
         else:
@@ -348,7 +350,7 @@ class InternetTalker:
             'jwt': jwt,
         }
         rpc_client = RpcClient()
-        resp_data = rpc_client.call(data, user_service_queue)
+        resp_data = rpc_client.call(data, USER_QUEUE)
         if 'error' in resp_data.keys():
             return False
         else:
@@ -357,6 +359,17 @@ class InternetTalker:
             updateSession(username, jwt)
             return True
         
+
+    @staticmethod
+    def task2calendar(data):
+        data['type'] = 'add_event_to_calendar'
+        data['jwt'] = session['jwt']
+        data['access_token'] = session['access_token']
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, CALENDAR_QUEUE)
+
+
+
 
 class Validator:
     """Класс для валидации данных"""
@@ -420,6 +433,7 @@ def get_code_url():
     }
     return f'{auth_url}?{urllib.parse.urlencode(params)}'
 
+
 def get_jwt(code):
     if not code:
         return "Ошибка: код авторизации не найден", 400
@@ -448,12 +462,14 @@ def get_jwt(code):
 
     return id_token
 
+
 def updateSession(username, token):
         session['jwt'] = token
         session['username'] = username
 
+
 def add_calendar_acces(access_token):
-    session['access_token'] = 'access_token'
+    session['access_token'] = access_token
 
 
 

@@ -88,3 +88,14 @@ def createTaskRoute(groupName, groupId):
     return redirect(url_for('group.selectGroup',name=groupName, id=groupId))
 
     
+@task.route('/add/google/', methods=['POST'])
+def add_task2google_route():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
+    
+    # Обработка данных
+    # TODO: обработка случая его отсутствия
+    if session['access_token']:
+        InternetTalker.task2calendar(data)
+    return ''

@@ -25,6 +25,7 @@ def google_login_end(jwt):
 def validate_id_token_code():
     code = request.args.get('code')
     jwt = get_jwt(code)
+    
     if InternetTalker.isEmailExist(jwt):
         return redirect('/')    
     return render_template('google-entry.html', jwt=jwt)
