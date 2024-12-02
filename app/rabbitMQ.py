@@ -1,8 +1,6 @@
 import pika
-import threading
 import json
 import uuid
-import time
 
 import pika
 import uuid

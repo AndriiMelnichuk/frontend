@@ -369,6 +369,14 @@ class InternetTalker:
         resp_data = rpc_client.call(data, CALENDAR_QUEUE)
 
 
+    @staticmethod
+    def is_task_at_google(data):
+        data['type'] = 'is_event_at_calendar'
+        data['access_token'] = session['access_token']
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, CALENDAR_QUEUE)
+        return resp_data
+
 
 
 class Validator:

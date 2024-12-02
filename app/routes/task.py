@@ -96,6 +96,16 @@ def add_task2google_route():
     
     # Обработка данных
     # TODO: обработка случая его отсутствия
-    if session['access_token']:
+    if 'access_token' in session.keys():
         InternetTalker.task2calendar(data)
     return ''
+
+@task.route('/isInGoogle/', methods=['POST'])
+def is_task_at_google():
+    task = request.get_json()
+    t = jsonify(False)
+    if 'access_token' in session.keys():
+        t = jsonify(InternetTalker.is_task_at_google(task))
+    return t
+    
+    

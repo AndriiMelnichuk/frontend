@@ -679,8 +679,36 @@ function showElement(text){
         elem.appendChild(upd)
 
         var cal = document.createElement('a')
-        cal.classList.add('complete-button')
-        cal.innerHTML = 'Add to Google calendar'
+        var isAtGoogle = true
+        fetch('/task/isInGoogle/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: task.title,
+                    description: task.description,
+                    date: task.date
+                }), 
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data){
+                cal.classList.add('complete-button')
+                cal.innerHTML = 'Add to Google calendar'
+            }
+            else{
+                cal.classList.add('delete-task')
+                cal.innerHTML = 'Delete from Google calendar'
+            }
+        })
+
+        
         cal.type = 'button'
         
         cal.addEventListener('click', ()=>{
