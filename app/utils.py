@@ -524,5 +524,6 @@ def generate_auth_url():
         'access_type': 'offline',
         'login_hint': email, 
     }
+    print(f'{auth_url}?{urllib.parse.urlencode(params)}')
     return f'{auth_url}?{urllib.parse.urlencode(params)}'
 

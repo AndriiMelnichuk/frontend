@@ -641,10 +641,16 @@ function showElement(text){
                     body: JSON.stringify(taskData), 
                 })
                 .then(response => {
-                    if (!response.ok) {
+                    if (response.status === 302 || response.status === 307) {
+                        const redirectUrl = response.headers.get('Location');
+                        if (redirectUrl) {
+                            window.location.href = redirectUrl;
+                        }
+                    } else if (response.ok) {
+                        return response.json();
+                    } else {
                         throw new Error(`Error HTTP: ${response.status}`);
                     }
-                    return response.json();
                 })
                 .then(data => {
                 // TODO поправить логику, при отправлении ссылки на google
@@ -677,10 +683,16 @@ function showElement(text){
                     body: JSON.stringify(taskData), 
                 })
                 .then(response => {
-                    if (!response.ok) {
+                    if (response.status === 302 || response.status === 307) {
+                        const redirectUrl = response.headers.get('Location');
+                        if (redirectUrl) {
+                            window.location.href = redirectUrl;
+                        }
+                    } else if (response.ok) {
+                        return response.json();
+                    } else {
                         throw new Error(`Error HTTP: ${response.status}`);
                     }
-                    return response.json();
                 })
                 .then(data => {
                     // TODO поправить логику, при отправлении ссылки на google
