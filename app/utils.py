@@ -362,7 +362,7 @@ class InternetTalker:
     @staticmethod
     def isEmailExist(jwt):
         def decode_jwt(jwt_token):
-            token = pyjwt.decode(jwt_token, 'OK_6SOME_SE5CRET', algorithms=['HS256'])
+            token = jwt.decode(jwt_token, options={"verify_signature": False})
             return token['username']
 
         data = {
@@ -511,5 +511,17 @@ def add_calendar_acces(access_token):
     session['access_token'] = access_token
 
 
-
+def generate_auth_url():
+    # email = 
+    auth_url = 'https://accounts.google.com/o/oauth2/v2/auth'
+    params = {
+        'nonce' : 'nonce',
+        'client_id': CLIENT_ID,
+        'redirect_uri': 'http://localhost:5000/google/validate2/',
+        'response_type': 'code',
+        'scope': 'openid profile email https://www.googleapis.com/auth/calendar.events',
+        'access_type': 'offline',
+        # 'login_hint': email, 
+    }
+    return f'{auth_url}?{urllib.parse.urlencode(params)}'
 
