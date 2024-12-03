@@ -680,7 +680,7 @@ function showElement(text){
 
         var cal = document.createElement('a')
         var isAtGoogle = true
-        fetch('/task/isInGoogle/', {
+        fetch('/google/task/isInGoogle/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -712,7 +712,7 @@ function showElement(text){
         cal.type = 'button'
         
         cal.addEventListener('click', ()=>{
-            const url = '/task/add/google/'
+            const url = '/google/task/add/'
             const taskData = {
                 id: task.id,
                 title: task.title,

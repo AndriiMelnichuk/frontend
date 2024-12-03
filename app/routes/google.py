@@ -34,3 +34,24 @@ def validate_id_token_code():
 def google_login():
     url = get_code_url()
     return redirect(url)
+
+@google.route('/task/add/', methods=['POST'])
+def add_task2google_route():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid JSON"}), 400
+    
+    # Обработка данных
+    # TODO: обработка случая его отсутствия
+    if 'access_token' in session.keys():
+        InternetTalker.task2calendar(data)
+    return ''
+
+@google.route('/task/isInGoogle/', methods=['POST'])
+def is_task_at_google():
+    task = request.get_json()
+    t = jsonify(False)
+    if 'access_token' in session.keys():
+        t = jsonify(InternetTalker.is_task_at_google(task))
+    return t
+    
