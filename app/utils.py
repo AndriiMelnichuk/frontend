@@ -263,13 +263,18 @@ class InternetTalker:
         # TODO add connection to real service
         tasks =  [
             Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
             Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
             Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
             Task(4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
             Task(5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
             Task(6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
             Task(7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
-            Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11', 'st 91', '2024-02-02')
+            Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11',  '2024-02-02')
         ]
         return tasks
     
