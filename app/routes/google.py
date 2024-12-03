@@ -54,4 +54,12 @@ def is_task_at_google():
     if 'access_token' in session.keys():
         t = jsonify(InternetTalker.is_task_at_google(task))
     return t
-    
+
+@google.route('/task/delete/', methods=['DELETE'])
+def delete_task_from_google_route():
+    task = request.get_json()
+    InternetTalker.delete_task_from_google(task)
+    return ''
+
+
+

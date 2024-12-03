@@ -617,6 +617,76 @@ function showElement(text){
     }
 
     function addTask2TaskList(task){
+        function buttonGoogle2Delete(cal){
+            cal.classList.remove('complete-button')
+            cal.classList.add('delete-task')
+            cal.innerHTML = 'Delete from Google calendar'
+            cal.onclick = function(){
+                const url = '/google/task/delete/'
+                const taskData = {
+                    id: task.id,
+                    title: task.title,
+                    description: task.description,
+                    assigned: task.assigned,
+                    date: task.date,
+                    status: task.status
+                };
+
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(taskData), 
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                // TODO поправить логику, при отправлении ссылки на google
+                location.reload();
+            })
+                buttonGoogle2Add(cal)
+            }
+        }
+        function buttonGoogle2Add(cal){
+            cal.classList.remove('delete-task')
+            cal.classList.add('complete-button')
+            cal.innerHTML = 'Add to Google calendar'          
+            cal.onclick = function(){
+                const url = '/google/task/add/'
+                const taskData = {
+                    id: task.id,
+                    title: task.title,
+                    description: task.description,
+                    assigned: task.assigned,
+                    date: task.date,
+                    status: task.status
+                };
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(taskData), 
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // TODO поправить логику, при отправлении ссылки на google
+                    location.reload();
+                })
+                buttonGoogle2Delete(cal)
+            }
+        }
         var elem =document.createElement('div')
         elem.classList.add('task-card')
         var title = document.createElement('h2')
@@ -698,48 +768,14 @@ function showElement(text){
             return response.json();
         })
         .then(data => {
-            if (!data){
-                cal.classList.add('complete-button')
-                cal.innerHTML = 'Add to Google calendar'
-            }
-            else{
-                cal.classList.add('delete-task')
-                cal.innerHTML = 'Delete from Google calendar'
-            }
+            if (data)
+                buttonGoogle2Delete(cal)
+            else
+                buttonGoogle2Add(cal)
         })
 
         
         cal.type = 'button'
-        
-        cal.addEventListener('click', ()=>{
-            const url = '/google/task/add/'
-            const taskData = {
-                id: task.id,
-                title: task.title,
-                description: task.description,
-                assigned: task.assigned,
-                date: task.date,
-                status: task.status
-            };
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(taskData), 
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Error HTTP: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // TODO поправить логику, при отправлении ссылки на google
-                location.reload();
-            })
-        })
 
         elem.appendChild(cal)
 

@@ -376,6 +376,16 @@ class InternetTalker:
         rpc_client = RpcClient()
         resp_data = rpc_client.call(data, CALENDAR_QUEUE)
         return resp_data
+    
+
+    @staticmethod
+    def delete_task_from_google(data):
+        data['type'] = 'delete_task'
+        data['access_token'] = session['access_token']
+        rpc_client = RpcClient()
+        resp_data = rpc_client.call(data, CALENDAR_QUEUE)
+        return resp_data
+
 
 
 
