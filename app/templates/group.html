@@ -634,6 +634,7 @@ function showElement(text){
 
                 fetch(url, {
                     method: 'DELETE',
+                    redirect: 'follow',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -669,6 +670,7 @@ function showElement(text){
 
                 fetch(url, {
                     method: 'POST',
+                    redirect: 'follow',
                     headers: {
                         'Content-Type': 'application/json',
                     },
