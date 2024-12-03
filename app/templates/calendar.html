@@ -206,6 +206,40 @@
      
      {%include 'sidebar.html'%}
 
+        <!-- Модальное update task-->
+        <div id="modalUpdateTask" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                    <form class="My-form">
+                        <h1>Update task</h1>
+                        
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" name="title" class="modal-input-text" placeholder="Title..." required>    
+                    
+                        <label>Description:</label>
+                        <textarea name="description" required placeholder="Description..."></textarea>
+                    
+                        <label>Assign to:</label>
+                        <div class="select-box" id="update-task-select-box">
+                            <input class="modal-input-text" type="text" name="assign-to" readonly placeholder="Assigne to">
+                            <div class="options-container"></div>
+                        </div>
+    
+                        <label>Task status</label>
+                        <select id="update-selector" class="modal-input-text">
+                            <option value="true">In process</option>
+                            <option value="false">Waiting</option>
+                        </select>
+                    
+                        <label>Complete before:</label>
+                        <input type="date">
+                        
+                        <button class="submit-button">Update</button>
+                    </form>
+            </div>
+    
+        </div>
+
     <script>
         
         const calendarBody = document.getElementById('calendar-body');
@@ -431,7 +465,7 @@
         com.classList.add('complete-button')
         com.innerHTML = 'Complete'
         com.type = 'button'
-        com.href = '/task/complete/{{group_name}}/' + task.id + '/' + '{{group_id}}'
+        com.href = '/calendar/task/complete/' + task.task_id + '/' + task.group_id
         elem.appendChild(com)
 
         
@@ -439,7 +473,7 @@
         del.classList.add('delete-task')
         del.innerHTML = 'Delete'
         del.type = 'button'
-        del.href = '/task/delete/{{group_name}}/' + task.id + '/' + '{{group_id}}'
+        del.href = '/calendar/task/delete/' + task.task_id + '/' + task.group_id
         elem.appendChild(del)
         
         var upd = document.createElement('a')
@@ -447,7 +481,7 @@
         upd.innerHTML = 'Update'
         upd.type = 'button'
         upd.addEventListener('click', ()=>{
-            openModalUpdate(task.id, task.title, task.description, task.assigned, task.date, task.status)
+            openModalUpdate(task.task_id, task.title, task.description, task.assigned, task.date, task.status, task.group_id)
         })
         elem.appendChild(upd)
 
@@ -485,5 +519,72 @@
         
     }
     </script>
+
+    <script>
+        function openModalUpdate(id, title, description, assigned, date, status, group_id){
+            var modal = document.getElementById("modalUpdateTask");
+            modal.style.display = "flex";
+            
+            var span = modal.children[0].children[0];
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+
+            var form = modal.getElementsByTagName('form');
+            var inputs = modal.getElementsByTagName('input');
+            var textarea = modal.getElementsByTagName('textarea');
+            textarea[0].value = description;
+            inputs[0].value = title;
+            inputs[1].value = assigned.join(', ');
+            inputs[2].value = date;
+            var selectedList = assigned.slice();
+            var selector = document.getElementById('update-selector')
+            
+            if (status)
+                selector.value = "true"
+            else
+            selector.value = "false"
+            userList.forEach( user => {
+                addUsersToSelector(user, selectBoxUpdate, selectedList);
+            })
+            selectedList.forEach( user => {
+                var elem = modal.querySelector('[data-value="' + user + '"]');
+                elem.style.background = '#ddd';
+            })
+
+            var button = modal.getElementsByTagName("button")[0]
+            button.addEventListener("click", function(event){
+                event.preventDefault()
+                var ntitle = inputs[0].value
+                var ndescription = textarea[0].value
+                var nassigned = selectedList	
+                var ndate = inputs[2].value
+                var nstatus = document.getElementById('update-selector').value
+                var res = {
+                    id: id,
+                    title: ntitle,
+                    description: ndescription,
+                    assigned: nassigned,
+                    status: nstatus,
+                    date: ndate
+                }
+
+                var res = encodeURIComponent(JSON.stringify(res))
+                fetch('/calendar/task/update/?id='+group_id+'&data='+res)
+                .then(res => {
+                    window.location.href = res.url
+                })
+
+            })
+
+        }
+    </script>
 </body>
+
+
 </html>
