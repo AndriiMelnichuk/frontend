@@ -13,3 +13,14 @@ class Task:
 class Group:
     id: int
     name: str
+
+
+@dataclass
+class TaskWithGroup:
+    group_id: int
+    task_id: int
+    title: str
+    description: str
+    assigned: list
+    status: str
+    date: str

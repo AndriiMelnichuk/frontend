@@ -259,22 +259,28 @@ class InternetTalker:
 
 
     @staticmethod
-    def getAllAssignedTask():
-        # TODO add connection to real service
+    def getAllAssignedTask(date):
+        data = {
+            'type': 'task_date',
+            'date': date,
+            'jwt': session['jwt']
+        }
+        rpc_client = RpcClient()
+        resp = rpc_client.call(data, SEARCH_QUEUE)
         tasks =  [
-            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            Task(1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            Task(2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
-            Task(3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
-            Task(4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
-            Task(5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
-            Task(6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
-            Task(7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
-            Task(8, 'title 14', 'des 41', ['user 12'], 'cr 11',  '2024-02-02')
+            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+            TaskWithGroup(0, 2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
+            TaskWithGroup(0, 3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+            TaskWithGroup(0, 4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+            TaskWithGroup(0, 5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+            TaskWithGroup(0, 6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+            TaskWithGroup(0, 7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+            TaskWithGroup(0, 8, 'title 14', 'des 41', ['user 12'], 'cr 11',  '2024-02-02')
         ]
         return tasks
     
