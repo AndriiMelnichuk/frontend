@@ -266,22 +266,32 @@ class InternetTalker:
             'jwt': session['jwt']
         }
         rpc_client = RpcClient()
-        resp = rpc_client.call(data, SEARCH_QUEUE)
-        tasks =  [
-            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
-            TaskWithGroup(0, 2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
-            TaskWithGroup(0, 3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
-            TaskWithGroup(0, 4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
-            TaskWithGroup(0, 5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
-            TaskWithGroup(0, 6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
-            TaskWithGroup(0, 7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
-            TaskWithGroup(0, 8, 'title 14', 'des 41', ['user 12'], 'cr 11',  '2024-02-02')
-        ]
+        resp_data = rpc_client.call(data, SEARCH_QUEUE)
+        group_id = resp_data['group_id']
+        task_id = resp_data['task_id']
+        task_name = resp_data['title']
+        description = resp_data['description']
+        deadline = resp_data['deadline']
+        members = resp_data['assigned']
+        todo_task = resp_data['status']
+        tasks = [
+            TaskWithGroup(group_id[i], task_id[i], task_name[i], description[i], members[i], todo_task[i], deadline[i])
+        for i in range(len(task_id))]
+        # tasks =  [
+        #     TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     TaskWithGroup(0, 1, 'title 999', 'des 1', ['user 1', 'user 2'], 'st 1', '2024-12-02'),
+        #     TaskWithGroup(0, 2, 'title 1', 'des 1', ['user 1'], 'cr 1', '2024-02-02'),
+        #     TaskWithGroup(0, 3, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+        #     TaskWithGroup(0, 4, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+        #     TaskWithGroup(0, 5, 'title 2', 'des 2', ['user 1'], 'cr 2', '2024-02-02'),
+        #     TaskWithGroup(0, 6, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+        #     TaskWithGroup(0, 7, 'title 2', 'des 2', ['user 1'], 'st 1', '2024-02-02'),
+        #     TaskWithGroup(0, 8, 'title 14', 'des 41', ['user 12'], 'cr 11',  '2024-02-02')
+        # ]
         return tasks
     
 
