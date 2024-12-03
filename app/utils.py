@@ -362,7 +362,7 @@ class InternetTalker:
     @staticmethod
     def isEmailExist(jwt):
         def decode_jwt(jwt_token):
-            token = jwt.decode(jwt_token, options={"verify_signature": False})
+            token = pyjwt.decode(jwt_token, options={"verify_signature": False})
             return token['username']
 
         data = {

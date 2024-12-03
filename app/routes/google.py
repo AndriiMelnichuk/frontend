@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session
 import urllib.parse
-from app.utils import Validator, InternetTalker, get_code_url, get_jwt
+from app.utils import Validator, InternetTalker, get_code_url, get_jwt, generate_auth_url
 
 
 
@@ -30,6 +30,13 @@ def validate_id_token_code():
         return redirect('/')    
     return render_template('google-entry.html', jwt=jwt)
 
+@google.route('/validate2/')
+def validate_id_token_code2():
+    code = request.args.get('code')
+    session['access_token'] = code
+    return redirect('/')    
+    
+
 @google.route('/login/')
 def google_login():
     url = get_code_url()
@@ -40,11 +47,10 @@ def add_task2google_route():
     data = request.get_json()
     if not data:
         return jsonify({"error": "Invalid JSON"}), 400
-    
-    # Обработка данных
-    # TODO: обработка случая его отсутствия
     if 'access_token' in session.keys():
         InternetTalker.task2calendar(data)
+    else:
+        return redirect('/google/validate2/')
     return ''
 
 @google.route('/task/isInGoogle/', methods=['POST'])
@@ -58,7 +64,10 @@ def is_task_at_google():
 @google.route('/task/delete/', methods=['DELETE'])
 def delete_task_from_google_route():
     task = request.get_json()
-    InternetTalker.delete_task_from_google(task)
+    if 'access_token' in session.keys():
+        InternetTalker.delete_task_from_google(task)
+    else:
+        return redirect('/google/validate2/')
     return ''
 
 
