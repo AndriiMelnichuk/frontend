@@ -512,7 +512,8 @@ def add_calendar_acces(access_token):
 
 
 def generate_auth_url():
-    # email = 
+    token = pyjwt.decode(session['jwt'], options={"verify_signature": False})
+    email =  token['email']
     auth_url = 'https://accounts.google.com/o/oauth2/v2/auth'
     params = {
         'nonce' : 'nonce',
@@ -521,7 +522,7 @@ def generate_auth_url():
         'response_type': 'code',
         'scope': 'openid profile email https://www.googleapis.com/auth/calendar.events',
         'access_type': 'offline',
-        # 'login_hint': email, 
+        'login_hint': email, 
     }
     return f'{auth_url}?{urllib.parse.urlencode(params)}'
 

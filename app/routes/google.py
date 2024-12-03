@@ -50,7 +50,7 @@ def add_task2google_route():
     if 'access_token' in session.keys():
         InternetTalker.task2calendar(data)
     else:
-        return redirect('/google/validate2/')
+        return redirect(generate_auth_url())
     return ''
 
 @google.route('/task/isInGoogle/', methods=['POST'])
@@ -67,7 +67,7 @@ def delete_task_from_google_route():
     if 'access_token' in session.keys():
         InternetTalker.delete_task_from_google(task)
     else:
-        return redirect('/google/validate2/')
+        return redirect(generate_auth_url())
     return ''
 
 
